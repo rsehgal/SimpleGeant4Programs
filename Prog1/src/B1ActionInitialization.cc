@@ -33,6 +33,7 @@
 //#include "B1RunAction.hh"
 //#include "B1EventAction.hh"
 //#include "B1SteppingAction.hh"
+#include "MyStepper.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,6 +58,7 @@ void B1ActionInitialization::BuildForMaster() const
 void B1ActionInitialization::Build() const
 {
   SetUserAction(new MyPrimaryGeneratorAction);
+  SetUserAction(new MyStepper);
 //  SetUserAction(new B1RunAction);
   
 //  B1EventAction* eventAction = new B1EventAction;
