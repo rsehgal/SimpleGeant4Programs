@@ -14,7 +14,8 @@
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
-
+#include "G4Tubs.hh"
+#define PI 3.14159265359
 MyDetectorConstruction::MyDetectorConstruction(){
 
 }
@@ -26,18 +27,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4NistManager* nist = G4NistManager::Instance();
   G4bool checkOverlaps = true;
 
-  
-  // Envelope params
-  //
-  G4double env_sizeXY = 20*m, env_sizeZ = 30*m;
-  //G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
-  
-  //     
-  // World
-  //
-  G4double world_sizeXYZ = 200*cm;
-  G4double world_sizeXY = 1.2*env_sizeXY;
-  G4double world_sizeZ  = 1.2*env_sizeZ;
+  G4double world_sizeXYZ = 30*cm;
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
 
   G4Box* solidWorld =    
@@ -59,139 +49,34 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                       0,                     //copy number
                       checkOverlaps);        //overlaps checking
 
-/*
-  //Created some test material
-  G4Material *orb_material = nist->FindOrBuildMaterial("G4_AIR");
 
-  G4double a; // atomic mass
-    G4double z; // atomic number
-    G4double density;
-
-
-  //Trying to create gas R134a (C2H2F4)
-    // define Elements
-    char *name="";
-    char *symbol="";
-    int natoms=0;
-    int ncomponents;
-
-    a = 1.01*g/mole;
-    G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-
-    a = 12.01*g/mole;
-    G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
-
-    a = 19.00*g/mole;
-    G4Element* elF  = new G4Element(name="Fluorine"  ,symbol="F" , z= 9., a);
-
-    density = 8.280*g/cm3;
-    G4Material* C2H2F4= new G4Material(name="C2H2F4", density, ncomponents=3);
-    C2H2F4->AddElement(elC , natoms=2);
-    C2H2F4->AddElement(elH , natoms=2);
-    C2H2F4->AddElement(elF, natoms=4);
-*/
-
-  //RPC setup of 1mx1m
-  //G4Box *rpc = new G4Box("RPC",0.25*world_sizeXYZ, 0.25*world_sizeXYZ, 2.*cm);
-  //G4LogicalVolume *logicalRpc = new G4LogicalVolume(rpc,orb_material,"LogicalRpc");
-  //G4LogicalVolume *logicalRpc = new G4LogicalVolume(rpc,C2H2F4,"LogicalRpc");
-
-/*
-  //Placement of four Rpc's
-  G4ThreeVector firstRpc(0.,0.,60*cm);
-  G4ThreeVector secondRpc(0.,0.,30*cm);
-  G4ThreeVector thirdRpc(0.,0.,-30*cm);
-  G4ThreeVector fourthRpc(0.,0.,-60*cm);
-*/  
-/*
-//Creation of four Rpc's
-  // G4Orb *orb = new G4Orb("simpleOrb",0.2*world_sizeXY);
-  // G4LogicalVolume *logicalOrb = new G4LogicalVolume(orb,orb_material,"LogicalOb");
-  G4VPhysicalVolume *phyRpc1 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          firstRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc2 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          secondRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc3 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          thirdRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc4 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          fourthRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-*/
-
-/*
-  //Building material using G4Material class
-  G4Material* Pb =
-    new G4Material("Lead", z= 82., a= 207.19*g/mole, density= 11.35*g/cm3);
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,5.*cm);
-*/
-  //G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,nist->FindOrBuildMaterial("G4_Pb"),"LogicalLeadBlock");
-  
-
-  //Lets try to build material from NIST database
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,17.*cm);
-  G4Material *Pb=nist->FindOrBuildMaterial("G4_Pb");
-  G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,Pb,"LogicalLeadBlock");
-  G4VPhysicalVolume *phyLeadBlock = new G4PVPlacement(0,
-                            //G4ThreeVector(),
+  //Creating Foil
+  G4Tubs *foil = new G4Tubs("Foil",0.*mm,6.*mm,0.075*mm,0.,2*PI);
+  G4Material *Be=nist->FindOrBuildMaterial("G4_Be");
+  G4LogicalVolume *logicalFoil = new G4LogicalVolume(foil,Be,"LogicalBeFoil");
+  G4VPhysicalVolume *phyFoil = new G4PVPlacement(0,
                             G4ThreeVector(),
-                            logicalLeadBlock,
-                            "PhysicalWorld",
+                            logicalFoil,
+                            "PhysicalFoil",
                             logicWorld,
                             false,
                             0,
                             checkOverlaps);
 
-  /*G4VPhysicalVolume *phyRpc1 = new G4PVPlacement(0.,
-                                                firstRpc,
-                                                G4ThreeVector(),
-                                                "FirstRpc",
-                                                logicWorld,
-                                                false,
-                                                0,
-                                                checkOverlaps);
-*/
-  /*  G4VPhysicalVolume *phyRpc2 = new G4PVPlacement(0.,
-                                                secondRpc,
-                                                logicalRpc,
-                                                "FirstRpc",
-                                                logicWorld,
-                                                false,
-                                                0,
-                                                checkOverlaps);
-*/
 
-  //Considering Square RPCs
+  //Now creating Target
+  G4Tubs *target = new G4Tubs("Target",0.*mm,7.*mm,7.*mm,0.,2*PI);
+  G4Material *W=nist->FindOrBuildMaterial("G4_W");
+  G4LogicalVolume *logicalTarget = new G4LogicalVolume(target,W,"LogicalWTarget");
+  G4VPhysicalVolume *phyTarget = new G4PVPlacement(0,
+                            G4ThreeVector(0.,0.,100*mm),
+                            logicalTarget,
+                            "PhysicalTarget",
+                            logicWorld,
+                            false,
+                            0,
+                            checkOverlaps);
+ 
 
 
 
