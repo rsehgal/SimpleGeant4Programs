@@ -59,104 +59,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                       0,                     //copy number
                       checkOverlaps);        //overlaps checking
 
-/*
-  //Created some test material
-  G4Material *orb_material = nist->FindOrBuildMaterial("G4_AIR");
-
-  G4double a; // atomic mass
-    G4double z; // atomic number
-    G4double density;
-
-
-  //Trying to create gas R134a (C2H2F4)
-    // define Elements
-    char *name="";
-    char *symbol="";
-    int natoms=0;
-    int ncomponents;
-
-    a = 1.01*g/mole;
-    G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-
-    a = 12.01*g/mole;
-    G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
-
-    a = 19.00*g/mole;
-    G4Element* elF  = new G4Element(name="Fluorine"  ,symbol="F" , z= 9., a);
-
-    density = 8.280*g/cm3;
-    G4Material* C2H2F4= new G4Material(name="C2H2F4", density, ncomponents=3);
-    C2H2F4->AddElement(elC , natoms=2);
-    C2H2F4->AddElement(elH , natoms=2);
-    C2H2F4->AddElement(elF, natoms=4);
-*/
-
-  //RPC setup of 1mx1m
-  //G4Box *rpc = new G4Box("RPC",0.25*world_sizeXYZ, 0.25*world_sizeXYZ, 2.*cm);
-  //G4LogicalVolume *logicalRpc = new G4LogicalVolume(rpc,orb_material,"LogicalRpc");
-  //G4LogicalVolume *logicalRpc = new G4LogicalVolume(rpc,C2H2F4,"LogicalRpc");
-
-/*
-  //Placement of four Rpc's
-  G4ThreeVector firstRpc(0.,0.,60*cm);
-  G4ThreeVector secondRpc(0.,0.,30*cm);
-  G4ThreeVector thirdRpc(0.,0.,-30*cm);
-  G4ThreeVector fourthRpc(0.,0.,-60*cm);
-*/  
-/*
-//Creation of four Rpc's
-  // G4Orb *orb = new G4Orb("simpleOrb",0.2*world_sizeXY);
-  // G4LogicalVolume *logicalOrb = new G4LogicalVolume(orb,orb_material,"LogicalOb");
-  G4VPhysicalVolume *phyRpc1 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          firstRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc2 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          secondRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc3 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          thirdRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-  G4VPhysicalVolume *phyRpc4 = new G4PVPlacement(0,
-                          //G4ThreeVector(),
-                          fourthRpc,
-                          logicalRpc,
-                          "PhysicalWorld",
-                          logicWorld,
-                          false,
-                          0,
-                          checkOverlaps);
-
-*/
-
-/*
-  //Building material using G4Material class
-  G4Material* Pb =
-    new G4Material("Lead", z= 82., a= 207.19*g/mole, density= 11.35*g/cm3);
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,5.*cm);
-*/
-  //G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,nist->FindOrBuildMaterial("G4_Pb"),"LogicalLeadBlock");
-  
+ 
 
   //Lets try to build material from NIST database
   G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,15.*cm);
@@ -171,27 +74,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             false,
                             0,
                             checkOverlaps);
-
-  /*G4VPhysicalVolume *phyRpc1 = new G4PVPlacement(0.,
-                                                firstRpc,
-                                                G4ThreeVector(),
-                                                "FirstRpc",
-                                                logicWorld,
-                                                false,
-                                                0,
-                                                checkOverlaps);
-*/
-  /*  G4VPhysicalVolume *phyRpc2 = new G4PVPlacement(0.,
-                                                secondRpc,
-                                                logicalRpc,
-                                                "FirstRpc",
-                                                logicWorld,
-                                                false,
-                                                0,
-                                                checkOverlaps);
-*/
-
-  //Considering Square RPCs
 
 
 

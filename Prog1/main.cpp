@@ -5,7 +5,6 @@
 #include "MyDetectorConstruction.h"
 #include "QBBC.hh"
 #include "FTFP_BERT.hh"
-#include "MyPhysics.h"
 #include "B1ActionInitialization.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
