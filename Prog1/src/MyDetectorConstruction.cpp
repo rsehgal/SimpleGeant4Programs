@@ -122,7 +122,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
 
    G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,1);
   G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,2);
-  G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.0750*cm, Si);
+  G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.1500*cm, Si);
 
    G4Tubs *target = new G4Tubs("Target",0.*cm,0.5*cm,0.007*cm,0.*deg,360.*deg);
    G4Material *Sn=nist->FindOrBuildMaterial("G4_Sn");
@@ -135,20 +135,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             false,
                             0,
                             checkOverlaps);
-  
-   
- /*
-  G4VPhysicalVolume *planeE1Phy = new G4PVPlacement(0,//yRot,
-                            G4ThreeVector(),
-                            planeE,
-                            "PhysicalWorld",
-                            logicWorld,
-                            false,
-                            0,
-                           checkOverlaps);
-*/
-
-
 
 for(int k=0; k < 5 ; k++){
 
@@ -159,38 +145,22 @@ for(int k=0; k < 5 ; k++){
 G4VPhysicalVolume *planePhy = new G4PVPlacement(yRot,
                             G4ThreeVector(0.-std::cos((90-(55+(20*k)))*3.14/180)*17.5*cm,0.,0.+std::cos((55+(20*k))*3.14/180)*17.5*cm),
                             planeLogical,
-                            "PhysicalWorld",
+                            "DeltaE"+std::to_string(k),
                             logicWorld,
                             false,
                             0,
                            checkOverlaps);
 
-  G4VPhysicalVolume *planeE1Phy = new G4PVPlacement(yRot,
+ G4VPhysicalVolume *planeEPhy = new G4PVPlacement(yRot,
                             G4ThreeVector(0.-std::cos((90-(55+(20*k)))*3.14/180)*18.65*cm,0.,(1.15*cm-0.075*cm)+std::cos((55+(20*k))*3.14/180)*18.65*cm),
-                            planeE1Logical,
-                            "PhysicalWorld",
+                            planeE,
+                            "E"+std::to_string(k),
                             logicWorld,
                             false,
                             0,
                            checkOverlaps);
-
-    G4VPhysicalVolume *planeE2Phy = new G4PVPlacement(yRot,
-                            G4ThreeVector(0.-std::cos((90-(55+(20*k)))*3.14/180)*18.65*cm,0.,(1.15*cm+0.075*cm)+std::cos((55+(20*k))*3.14/180)*18.65*cm),
-                            planeE2Logical,
-                            "PhysicalWorld",
-                            logicWorld,
-                            false,
-                            0,
-                           checkOverlaps);
-
 }
 
-
-//G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0025*cm,Si,16);
- 
- 
-  
-  
 	return physWorld;
 }
 
@@ -207,7 +177,7 @@ G4LogicalVolume* MyDetectorConstruction::GetBlock(std::string name,double halfX,
 	G4VPhysicalVolume *blockPhy = new G4PVPlacement(0,//yRot,
 		            temp,		   
                             GetStrip("strip",stripHalfLen,2.5*cm,stripHalfZ,mat),
-                            "PhysicalWorld",
+                            tempLogical->GetName()+"Strip"+std::to_string(i),
                             tempLogical,
                             false,
                             0,
@@ -218,7 +188,7 @@ G4LogicalVolume* MyDetectorConstruction::GetBlock(std::string name,double halfX,
 	G4VPhysicalVolume *blockPhy = new G4PVPlacement(0,//yRot,
 		            temp,		   
                             GetStrip("strip",2.5*cm,stripHalfLen,stripHalfZ,mat),
-                            "PhysicalWorld",
+                            tempLogical->GetName()+"Strip"+std::to_string(i),
                             tempLogical,
                             false,
                             0,
@@ -243,7 +213,7 @@ G4ThreeVector temp1(0.,0.,-halfZ);
 G4VPhysicalVolume *blockEPhy1 = new G4PVPlacement(0,//yRot,
 		            temp1,		   
                             E1,
-                            "PhysicalWorld",
+                            "PlaneX",
                             EBlockLogical,
                             false,
                             0,
@@ -253,7 +223,7 @@ G4ThreeVector temp2(0.,0.,halfZ);
 G4VPhysicalVolume *blockEPhy2 = new G4PVPlacement(0,//yRot,
 		            temp2,		   
                             E2,
-                            "PhysicalWorld",
+                            "PlaneY",
                             EBlockLogical,
                             false,
                             0,
