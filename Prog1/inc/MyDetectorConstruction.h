@@ -7,12 +7,17 @@
 class G4VUserDetectorConstruction;
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4Material;
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
+static int stripNum;
 public:
 	MyDetectorConstruction();
 	~MyDetectorConstruction();
+	G4LogicalVolume* GetBlock(std::string name,double halfX,double halfY, double halfZ, G4Material *mat,int numOfStrips,double stripHalfZ,int dir);
+	G4LogicalVolume* GetStrip(std::string name,double halfX,double halfY, double halfZ, G4Material *mat);
+	G4LogicalVolume* CreateEBlock(G4LogicalVolume* E1, G4LogicalVolume* E2, double halfZ, G4Material *mat);
 	G4VPhysicalVolume* Construct();
 };
 #endif
