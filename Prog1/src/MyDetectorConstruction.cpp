@@ -19,6 +19,9 @@
 #include <iostream>
 
 int MyDetectorConstruction::stripNum = 0;
+int MyDetectorConstruction::blockNum=-1;
+int MyDetectorConstruction::eBlockNum=-1;
+
 
 MyDetectorConstruction::MyDetectorConstruction(){
 
@@ -120,8 +123,8 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4Material *Si=nist->FindOrBuildMaterial("G4_Si");
   G4LogicalVolume *planeLogical = GetBlock("planeDeltaE",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,1);
 
-   G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,1);
-  G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,2);
+  G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0750*cm,1);
+  G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0750*cm,2);
   G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.1500*cm, Si);
 
    G4Tubs *target = new G4Tubs("Target",0.*cm,0.5*cm,0.007*cm,0.*deg,360.*deg);
@@ -141,25 +144,27 @@ for(int k=0; k < 5 ; k++){
   G4RotationMatrix *yRot=new G4RotationMatrix;
   yRot->rotateY((50+(20*k))*3.14/180);
 
-
+  blockNum++;
 G4VPhysicalVolume *planePhy = new G4PVPlacement(yRot,
                             G4ThreeVector(0.-std::cos((90-(55+(20*k)))*3.14/180)*17.5*cm,0.,0.+std::cos((55+(20*k))*3.14/180)*17.5*cm),
                             planeLogical,
                             "DeltaE"+std::to_string(k),
                             logicWorld,
                             false,
-                            0,
+                            blockNum,
                            checkOverlaps);
 
+ eBlockNum++;
  G4VPhysicalVolume *planeEPhy = new G4PVPlacement(yRot,
                             G4ThreeVector(0.-std::cos((90-(55+(20*k)))*3.14/180)*18.65*cm,0.,(1.15*cm-0.075*cm)+std::cos((55+(20*k))*3.14/180)*18.65*cm),
                             planeE,
                             "E"+std::to_string(k),
                             logicWorld,
                             false,
-                            0,
+							eBlockNum,
                            checkOverlaps);
 }
+
 
 	return physWorld;
 }
@@ -180,7 +185,7 @@ G4LogicalVolume* MyDetectorConstruction::GetBlock(std::string name,double halfX,
                             tempLogical->GetName()+"Strip"+std::to_string(i),
                             tempLogical,
                             false,
-                            0,
+                            i,
                            checkOverlaps);
 	}
 	else{
@@ -191,7 +196,7 @@ G4LogicalVolume* MyDetectorConstruction::GetBlock(std::string name,double halfX,
                             tempLogical->GetName()+"Strip"+std::to_string(i),
                             tempLogical,
                             false,
-                            0,
+                            i,
                            checkOverlaps);
 	
 	}	
@@ -210,6 +215,7 @@ G4LogicalVolume* MyDetectorConstruction::CreateEBlock(G4LogicalVolume* E1, G4Log
   G4bool checkOverlaps = true;
 G4LogicalVolume* EBlockLogical = GetStrip("XYBlock",2.5*cm,2.5*cm,halfZ,mat);
 G4ThreeVector temp1(0.,0.,-halfZ);
+
 G4VPhysicalVolume *blockEPhy1 = new G4PVPlacement(0,//yRot,
 		            temp1,		   
                             E1,
@@ -218,6 +224,7 @@ G4VPhysicalVolume *blockEPhy1 = new G4PVPlacement(0,//yRot,
                             false,
                             0,
                            checkOverlaps);
+
 
 G4ThreeVector temp2(0.,0.,halfZ);
 G4VPhysicalVolume *blockEPhy2 = new G4PVPlacement(0,//yRot,

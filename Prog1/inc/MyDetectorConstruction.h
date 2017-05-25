@@ -12,6 +12,8 @@ class G4Material;
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
 static int stripNum;
+static int blockNum;
+static int eBlockNum;
 public:
 	MyDetectorConstruction();
 	~MyDetectorConstruction();
