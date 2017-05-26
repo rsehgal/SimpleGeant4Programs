@@ -38,6 +38,10 @@ void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
    //fParticleGun->SetParticlePosition(G4ThreeVector(-50 * cm, 0., -120 * cm));
    //fParticleGun->GeneratePrimaryVertex(event);
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 * cm));
+  G4double x = G4UniformRand();
+  G4double y = G4UniformRand();
+  G4double z = G4UniformRand();
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(-x,-y,-z));
   fParticleGun->GeneratePrimaryVertex(event);
    //fParticleGun->SetParticlePosition(G4ThreeVector(50 * cm, 0., -120 * cm));
    //fParticleGun->GeneratePrimaryVertex(event);
