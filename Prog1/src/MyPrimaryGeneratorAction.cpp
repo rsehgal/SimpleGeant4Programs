@@ -11,6 +11,7 @@
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include <random>
 
 
 MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
@@ -27,6 +28,7 @@ MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
 
   // Set the kinetic energy of the protons to 50 keV
   // and tell the gun to emit them along the x-axis
+  //std::cout<<"== Called Constructor ==" << std::endl;
   fParticleGun->SetParticleEnergy(50. * keV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -120 * cm ));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
@@ -37,7 +39,10 @@ MyPrimaryGeneratorAction::~MyPrimaryGeneratorAction() { delete fParticleGun; }
 void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
    //fParticleGun->SetParticlePosition(G4ThreeVector(-50 * cm, 0., -120 * cm));
    //fParticleGun->GeneratePrimaryVertex(event);
+  //std::cout<<"== Called GeneratePrimaries ==" << std::endl;
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 * cm));
+
+  //fParticleGun->SetParticleEnergy(35.*G4UniformRand()*MeV);
   G4double x = G4UniformRand();
   G4double y = G4UniformRand();
   G4double z = G4UniformRand();

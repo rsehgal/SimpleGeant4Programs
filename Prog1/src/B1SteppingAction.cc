@@ -75,11 +75,22 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   G4double edepStep = step->GetTotalEnergyDeposit();
   fEventAction->AddEdep(edepStep);  
 
+  G4StepPoint *point1 = step->GetPreStepPoint();
+  G4StepPoint *point2 = step->GetPostStepPoint();
+
 
   G4Track* track = step->GetTrack();
-  G4ThreeVector hit = track->GetPosition();
+  G4ThreeVector hitPre = track->GetPosition();
+  G4ThreeVector hitPost = track->GetPosition();
+  if(point1->GetPhysicalVolume()->GetName()!="World"){
   std::cout<<"Position : ";
-  std::cout<<hit.x()<<", "<<hit.y()<<", "<<hit.z()<<std::endl;
+  std::cout<<"PreStep : "<< hitPre.x()<<", "<<hitPre.y()<<", "<<hitPre.z()
+		   <<" :: PostStep : "<< hitPost.x()<<", "<<hitPost.y()<<", "<<hitPost.z()
+		   <<" :: StepLength : " << step->GetStepLength()
+		   <<" :: EnergyDeposited in Step: "<< step->GetTotalEnergyDeposit()
+		   <<" :: PhysicalName : "<<  point1->GetPhysicalVolume()->GetName()
+  	  	   <<" :: Energy-Remaining : "<< point1->GetKineticEnergy() << std::endl;
+  }
 
 }
 
