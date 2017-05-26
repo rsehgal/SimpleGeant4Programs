@@ -123,9 +123,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4Material *Si=nist->FindOrBuildMaterial("G4_Si");
   G4LogicalVolume *planeLogical = GetBlock("planeDeltaE",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0025*cm,1);
 
-  G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0750*cm,1);
-  G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0025*cm,Si,16,0.0750*cm,2);
-  G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.1500*cm, Si);
+  G4LogicalVolume *planeE1Logical = GetBlock("planeE1",2.5*cm,2.5*cm,0.0375*cm,Si,16,0.0375*cm,1);
+  G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0375*cm,Si,16,0.0375*cm,2);
+  G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.0750*cm, Si);
 
    G4Tubs *target = new G4Tubs("Target",0.*cm,0.5*cm,0.007*cm,0.*deg,360.*deg);
    G4Material *Sn=nist->FindOrBuildMaterial("G4_Sn");
@@ -214,7 +214,7 @@ return (new G4LogicalVolume( (new G4Box(name+std::to_string(stripNum),halfX,half
 G4LogicalVolume* MyDetectorConstruction::CreateEBlock(G4LogicalVolume* E1, G4LogicalVolume* E2, double halfZ, G4Material *mat){
   G4bool checkOverlaps = true;
 G4LogicalVolume* EBlockLogical = GetStrip("XYBlock",2.5*cm,2.5*cm,halfZ,mat);
-G4ThreeVector temp1(0.,0.,-halfZ);
+G4ThreeVector temp1(0.,0.,-halfZ/2.);
 
 G4VPhysicalVolume *blockEPhy1 = new G4PVPlacement(0,//yRot,
 		            temp1,		   
@@ -226,7 +226,7 @@ G4VPhysicalVolume *blockEPhy1 = new G4PVPlacement(0,//yRot,
                            checkOverlaps);
 
 
-G4ThreeVector temp2(0.,0.,halfZ);
+G4ThreeVector temp2(0.,0.,halfZ/2.);
 G4VPhysicalVolume *blockEPhy2 = new G4PVPlacement(0,//yRot,
 		            temp2,		   
                             E2,
