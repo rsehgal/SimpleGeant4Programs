@@ -23,46 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+// $Id: B1SteppingAction.hh 74483 2013-10-09 13:37:06Z gcosmo $
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+/// \file B1SteppingAction.hh
+/// \brief Definition of the B1SteppingAction class
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#ifndef B1SteppingAction_h
+#define B1SteppingAction_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
-{}
+class B1EventAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4LogicalVolume;
 
-B1ActionInitialization::~B1ActionInitialization()
-{}
+/// Stepping action class
+/// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
+class B1SteppingAction : public G4UserSteppingAction
 {
-//  SetUserAction(new B1RunAction);
-}
+  public:
+    B1SteppingAction(B1EventAction* eventAction);
+    virtual ~B1SteppingAction();
+
+    // method from the base class
+    virtual void UserSteppingAction(const G4Step*);
+
+  private:
+    B1EventAction*  fEventAction;
+    G4LogicalVolume* fScoringVolume;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
-{
-  SetUserAction(new MyPrimaryGeneratorAction);
-  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
-  
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
