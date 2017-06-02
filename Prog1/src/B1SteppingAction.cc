@@ -77,19 +77,23 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
   G4StepPoint *point1 = step->GetPreStepPoint();
   G4StepPoint *point2 = step->GetPostStepPoint();
-
+  G4TouchableHandle touch1 = point1->GetTouchableHandle();
+  G4TouchableHandle touch2 = point2->GetTouchableHandle();
 
   G4Track* track = step->GetTrack();
   G4ThreeVector hitPre = track->GetPosition();
   G4ThreeVector hitPost = track->GetPosition();
   if(point1->GetPhysicalVolume()->GetName()!="World"){
-  std::cout<<"Position : ";
+
   std::cout<<"PreStep : "<< hitPre.x()<<", "<<hitPre.y()<<", "<<hitPre.z()
 		   <<" :: PostStep : "<< hitPost.x()<<", "<<hitPost.y()<<", "<<hitPost.z()
 		   <<" :: StepLength : " << step->GetStepLength()
 		   <<" :: EnergyDeposited in Step: "<< step->GetTotalEnergyDeposit()
 		   <<" :: PhysicalName : "<<  point1->GetPhysicalVolume()->GetName()
-  	  	   <<" :: Energy-Remaining : "<< point1->GetKineticEnergy() << std::endl;
+  	  	   <<" :: Energy-Remaining : "<< point1->GetKineticEnergy()
+		   <<" :: GrandParentName Prestep: " << touch1->GetVolume(2)->GetName() << std::endl; 
+		   //<<" :: GrandParentName Poststep: " << touch2->GetVolume(2)->GetName() << std::endl;
+                  
   }
 
 }
