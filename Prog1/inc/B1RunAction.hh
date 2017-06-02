@@ -33,7 +33,8 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
+//#include <fstream>
+using namespace std;
 class G4Run;
 class G4LogicalVolume;
 
@@ -46,6 +47,8 @@ class G4LogicalVolume;
 class B1RunAction : public G4UserRunAction
 {
   public:
+   static ofstream *myfile;
+    //static ofstream GetEnergyFile(){return myfile;}
     B1RunAction();
     virtual ~B1RunAction();
 

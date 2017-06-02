@@ -127,7 +127,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4LogicalVolume *planeE2Logical = GetBlock("planeE2",2.5*cm,2.5*cm,0.0375*cm,Si,16,0.0375*cm,2);
   G4LogicalVolume *planeE = CreateEBlock(planeE1Logical, planeE2Logical, 0.0750*cm, Si);
 
-   G4Tubs *target = new G4Tubs("Target",0.*cm,0.5*cm,0.007*cm,0.*deg,360.*deg);
+   G4Tubs *target = new G4Tubs("Target",0.*cm,0.25*cm,0.007*cm,0.*deg,360.*deg);
    G4Material *Sn=nist->FindOrBuildMaterial("G4_Sn");
    G4LogicalVolume *logicalTarget = new G4LogicalVolume(target,Sn,"Target");
    G4VPhysicalVolume *phyTarget = new G4PVPlacement(0,

@@ -6,10 +6,12 @@
 #include "QBBC.hh"
 #include "FTFP_BERT.hh"
 #include "B1ActionInitialization.hh"
+//..........................................
+// for visualization 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
-
+//...........................................
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
@@ -40,22 +42,34 @@ int main(int argc, char *argv[]){
   G4RunManager *runManager = new G4RunManager;
   //G4VUserPhysicsList* phyList = new MyPhysics;
 
+//........................................................................
   //Detector Construction
   runManager->SetUserInitialization(new MyDetectorConstruction());
+//.........................................................................
+
   //runManager->SetUserInitialization(new HodoScope());
 
   //Physics List
   //For user define PhysicsList uncomment the line below
   //runManager->SetUserInitialization(new MyPhysics);
-  
+
+//......................................................................  
   //Using Pre defined PhysicsList
   runManager->SetUserInitialization(new FTFP_BERT);
+//......................................................................
+
 
   //Primary Generator Action
   //runManager->SetUserAction(new MyPrimaryGeneratorAction());
 
+
+//.....................................................................
   // User action initialization
   runManager->SetUserInitialization(new B1ActionInitialization());
+//......................................................................
+
+
+//...........................................................................
 #ifdef G4VIS_USE
     // Visualization manager construction
     G4VisManager* visManager = new G4VisExecutive;
@@ -63,9 +77,15 @@ int main(int argc, char *argv[]){
     // G4VisManager* visManager = new G4VisExecutive("Quiet");
     visManager->Initialize();
 #endif
+//..............................................................................
+
 
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+
+//...............................................................................
+// for visualization purposes
 
     if (argc>1) {
         // execute an argument macro file if exist
@@ -93,6 +113,10 @@ int main(int argc, char *argv[]){
 #endif
     }
 
+//..............................................................................
+
+
+// job termination
 
   delete runManager;
 

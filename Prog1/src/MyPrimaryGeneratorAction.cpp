@@ -12,7 +12,10 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <random>
-
+#include <G4FastStep.hh>
+#include <fstream>
+#include "B1RunAction.hh"
+using namespace std;
 
 MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
   G4int n_particle = 1;
@@ -25,7 +28,6 @@ MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
   G4double uy = sinTheta*std::sin(phi);
   G4double uz = cosTheta;
 
-
   // Set the kinetic energy of the protons to 50 keV
   // and tell the gun to emit them along the x-axis
   //std::cout<<"== Called Constructor ==" << std::endl;
@@ -35,7 +37,7 @@ MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
 //  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(-1., 0., 0.));
 }
 MyPrimaryGeneratorAction::~MyPrimaryGeneratorAction() { delete fParticleGun; }
-
+    ofstream myfile;
 void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
    //fParticleGun->SetParticlePosition(G4ThreeVector(-50 * cm, 0., -120 * cm));
    //fParticleGun->GeneratePrimaryVertex(event);
@@ -43,9 +45,22 @@ void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 * cm));
 
   //fParticleGun->SetParticleEnergy(35.*G4UniformRand()*MeV);
+
   G4double x = G4UniformRand();
   G4double y = G4UniformRand();
   G4double z = G4UniformRand();
+  G4double energy = G4RandGauss::shoot(17.* MeV,2. * MeV);
+
+  *B1RunAction::myfile << energy << std::endl;
+//  fstream fs;
+//  fs.open("energy.txt",fstream::app);
+//  fs << energy << endl;
+//  fs.close();
+
+    
+
+//  G4bool Write();
+  fParticleGun->SetParticleEnergy(energy);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(-x,-y,-z));
   fParticleGun->GeneratePrimaryVertex(event);
    //fParticleGun->SetParticlePosition(G4ThreeVector(50 * cm, 0., -120 * cm));

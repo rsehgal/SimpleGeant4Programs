@@ -56,7 +56,15 @@ void B1EventAction::BeginOfEventAction(const G4Event*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1EventAction::EndOfEventAction(const G4Event*)
-{   
+{  
+ /* double E1,E2,th1,th2,phi1,phi2,erel,c12;   //declaration of energy and theta_phi
+  th1=acos(z1/r);
+  th2=acos(z2/r);
+  phi1=atan(y1/x1);
+  phi2=atan(y2/x2);
+  c12=cos(th1)*cos(th2)+(sin(th1)*sin(th2))*cos(phi1-phi2);
+  erel=(1/2)*(E1+E2-2*sqrt(E1*E2*C12));      // definition of relative energy
+*/
   // accumulate statistics in B1Run
   B1Run* run 
     = static_cast<B1Run*>(
