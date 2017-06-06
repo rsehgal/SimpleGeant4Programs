@@ -35,7 +35,7 @@
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+int B1EventAction::evNo = 0;
 B1EventAction::B1EventAction()
 : G4UserEventAction(),
   fEdep(0.)
@@ -49,8 +49,10 @@ B1EventAction::~B1EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1EventAction::BeginOfEventAction(const G4Event*)
-{    
+{ evNo++;
+  std::cout << "======== Event no : "<< evNo << "  started =======" << std::endl; 
   fEdep = 0.;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,6 +72,7 @@ void B1EventAction::EndOfEventAction(const G4Event*)
     = static_cast<B1Run*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddEdep(fEdep);
+  std::cout << "======== Event no : "<< evNo << "  ended  =======" << std::endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

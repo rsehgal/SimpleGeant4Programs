@@ -39,6 +39,7 @@
 
 class B1EventAction : public G4UserEventAction
 {
+static int evNo;
   public:
     B1EventAction();
     virtual ~B1EventAction();
