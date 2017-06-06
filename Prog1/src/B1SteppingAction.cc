@@ -106,6 +106,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 		  B1EventAction::evMultiplicity++;
 		  B1EventAction::volName.push_back(touch1->GetVolume(2)->GetName());
 		  B1EventAction::energy.push_back(track->GetKineticEnergy());
+		  B1EventAction::vertexEnergy.push_back(track->GetVertexKineticEnergy());
 		  B1EventAction::position.push_back(point1->GetPosition());
 		//  std::cout<<"GrandMa : "<< touch1->GetVolume(2)->GetName() << " :: StepStatus : " << point1->GetStepStatus() << std::endl;
 

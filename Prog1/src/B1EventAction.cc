@@ -40,6 +40,7 @@ int B1EventAction::evMultiplicity = 0;
 int B1EventAction::genuineEventCounter = 0;
 std::vector<G4String> B1EventAction::volName({"Hello"});
 std::vector<G4double> B1EventAction::energy({0.});
+std::vector<G4double> B1EventAction::vertexEnergy({0.});
 std::vector<G4ThreeVector> B1EventAction::position({G4ThreeVector(0.,0.,0.)});
 
 B1EventAction::B1EventAction()
@@ -88,7 +89,8 @@ void B1EventAction::EndOfEventAction(const G4Event*)
   	  std::cout<<"Event Num : "<< evNo <<" :: EventMultiplicity : " << evMultiplicity << " :: DetectorNames : "
   			  << volName[0] << " : " << volName[1]
 			  << " :: Position : " << position[0] <<" : "<< position[1]
-			  << " :: Energy : "<< energy[0] <<" : " << energy[1] << std::endl;
+			  << " :: VertexEnergy : "<< vertexEnergy[0] <<" : Energy " << energy[0]
+			  << " :: VertexEnergy : "<< vertexEnergy[1] <<" : Energy " << energy[1] << std::endl;
     }
 }
 
