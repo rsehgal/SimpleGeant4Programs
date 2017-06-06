@@ -72,6 +72,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
 */
   // collect energy deposited in this step
+
   G4double edepStep = step->GetTotalEnergyDeposit();
   fEventAction->AddEdep(edepStep);  
 
@@ -87,20 +88,55 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   if(point1->GetPhysicalVolume()->GetName()!="World")
   if(point2->GetPhysicalVolume()->GetName()!="World")
   {
-  {
 
-  std::cout<<"PreStep : "<< hitPre.x()<<", "<<hitPre.y()<<", "<<hitPre.z()
+/*
+	  if((touch1->GetVolume(2)->GetName()=="E0" &&  point1->GetStepStatus()==fGeomBoundary )||
+			  (touch1->GetVolume(2)->GetName()=="E1" &&  point1->GetStepStatus()==fGeomBoundary ) ||
+			  (touch1->GetVolume(2)->GetName()=="E2" &&  point1->GetStepStatus()==fGeomBoundary ) ||
+			  (touch1->GetVolume(2)->GetName()=="E3" &&  point1->GetStepStatus()==fGeomBoundary ) ||
+			  (touch1->GetVolume(2)->GetName()=="E4" &&  point1->GetStepStatus()==fGeomBoundary ))
+*/
+
+	  if((touch1->GetVolume(2)->GetName()=="E0" ||
+			  touch1->GetVolume(2)->GetName()=="E1" ||
+			  touch1->GetVolume(2)->GetName()=="E2" ||
+			  touch1->GetVolume(2)->GetName()=="E3" ||
+			  touch1->GetVolume(2)->GetName()=="E4" )  && point1->GetStepStatus()==fGeomBoundary)
+	  {
+		  B1EventAction::evMultiplicity++;
+		  B1EventAction::volName.push_back(touch1->GetVolume(2)->GetName());
+		  B1EventAction::energy.push_back(track->GetKineticEnergy());
+		  B1EventAction::position.push_back(point1->GetPosition());
+		//  std::cout<<"GrandMa : "<< touch1->GetVolume(2)->GetName() << " :: StepStatus : " << point1->GetStepStatus() << std::endl;
+
+
+
+/*
+
+		  std::cout<<"PreStep : "<< hitPre.x()<<", "<<hitPre.y()<<", "<<hitPre.z()
 		   <<" :: PostStep : "<< hitBeginOfPost.x()<<", "<<hitBeginOfPost.y()<<", "<<hitBeginOfPost.z()
 		   <<" :: StepLength : " << step->GetStepLength()
 		   <<" :: EnergyDeposited in Step: "<< step->GetTotalEnergyDeposit()
 		   <<" :: PhysicalName : "<<  point1->GetPhysicalVolume()->GetName()
   	  	   <<" :: Energy-Remaining : "<< point1->GetKineticEnergy()
-		   <<" :: GrandParentName Prestep: " << touch1->GetVolume(2)->GetName() << std::endl; 
+		   <<" :: GrandParentName Prestep: " << touch1->GetVolume(2)->GetName()  <<  std::endl;
+*/
+
+
+
+		   //<<" :: GrandParentName Prestep: " << touch1->GetVolume(2)->GetName()
+		   //<<" :: TrackID : "<< step->GetTrack()->GetTrackID() <<  std::endl;
 		   //<<" :: GrandParentName Poststep: " << touch2->GetVolume(2)->GetName() << std::endl;
-                  
+	  }
  
   }
-  }
+
+
+  /*if(B1EventAction::evMultiplicity > 1){
+	  B1EventAction::genuineEventCounter++;
+	  std::cout<<"Event Num : "<< fEventAction->GetEventNum() <<" :: EventMultiplicity : " << B1EventAction::evMultiplicity << std::endl;
+  }*/
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

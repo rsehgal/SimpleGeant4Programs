@@ -40,6 +40,7 @@
 #include "G4SystemOfUnits.hh"
 #include <G4FastStep.hh>
 #include <string.h>
+#include "B1EventAction.hh"
 
 using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,14 +116,22 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
    = static_cast<const MyPrimaryGeneratorAction*>
      (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String runCondition;
+/*
   if (generatorAction)
   {
-    const G4ParticleGun* particleGun = generatorAction->GetParticleGun();
-    runCondition += particleGun->GetParticleDefinition()->GetParticleName();
+    const G4ParticleGun* particleGun1 = generatorAction->GetParticleGun1();
+    runCondition += particleGun1->GetParticleDefinition()->GetParticleName();
     runCondition += " of ";
-    G4double particleEnergy = particleGun->GetParticleEnergy();
-    runCondition += G4BestUnit(particleEnergy,"Energy");
+    G4double particleEnergy = particleGun1->GetParticleEnergy();
+    runCondition += G4BestUnit(particleEnergy,"Energy\n");
+
+    const G4ParticleGun* particleGun2 = generatorAction->GetParticleGun2();
+        runCondition += particleGun2->GetParticleDefinition()->GetParticleName();
+        runCondition += " of ";
+        particleEnergy = particleGun2->GetParticleEnergy();
+        runCondition += G4BestUnit(particleEnergy,"Energy");
   }
+*/
           
   // Print
   //  
@@ -140,6 +149,7 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
 //  ofstream myfile;
   myfile->close();
   delete myfile;
+  std::cout<<"Total Number of Genuine Events : "<< B1EventAction::genuineEventCounter << std::endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

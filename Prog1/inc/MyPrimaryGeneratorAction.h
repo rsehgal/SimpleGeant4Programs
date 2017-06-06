@@ -53,10 +53,12 @@ class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event*);         
   
     // method to access particle gun
-    const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+    const G4ParticleGun* GetParticleGun1() const { return fParticleGun1; }
+    //const G4ParticleGun* GetParticleGun2() const { return fParticleGun2; }
   
   private:
-    G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
+    G4ParticleGun*  fParticleGun1; // pointer a to G4 gun class
+    G4ParticleGun*  fParticleGun2; // pointer a to G4 gun class
     //G4Box* fEnvelopeBox;
 };
 

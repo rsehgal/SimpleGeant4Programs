@@ -36,6 +36,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 int B1EventAction::evNo = 0;
+int B1EventAction::evMultiplicity = 0;
+int B1EventAction::genuineEventCounter = 0;
+std::vector<G4String> B1EventAction::volName({"Hello"});
+std::vector<G4double> B1EventAction::energy({0.});
+std::vector<G4ThreeVector> B1EventAction::position({G4ThreeVector(0.,0.,0.)});
+
 B1EventAction::B1EventAction()
 : G4UserEventAction(),
   fEdep(0.)
@@ -50,8 +56,12 @@ B1EventAction::~B1EventAction()
 
 void B1EventAction::BeginOfEventAction(const G4Event*)
 { evNo++;
-  std::cout << "======== Event no : "<< evNo << "  started =======" << std::endl; 
+  //std::cout << "======== Event no : "<< evNo << "  started =======" << std::endl;
   fEdep = 0.;
+  evMultiplicity=0;
+  volName.clear();
+  energy.clear();
+  position.clear();
 
 }
 
@@ -72,7 +82,14 @@ void B1EventAction::EndOfEventAction(const G4Event*)
     = static_cast<B1Run*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddEdep(fEdep);
-  std::cout << "======== Event no : "<< evNo << "  ended  =======" << std::endl; 
+ // std::cout << "======== Event no : "<< evNo << "  ended  =======" << std::endl;
+  if(evMultiplicity == 2){
+  	  genuineEventCounter++;
+  	  std::cout<<"Event Num : "<< evNo <<" :: EventMultiplicity : " << evMultiplicity << " :: DetectorNames : "
+  			  << volName[0] << " : " << volName[1]
+			  << " :: Position : " << position[0] <<" : "<< position[1]
+			  << " :: Energy : "<< energy[0] <<" : " << energy[1] << std::endl;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

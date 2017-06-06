@@ -33,14 +33,25 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
+#include <vector>
+#include <G4String.hh>
+#include <G4ThreeVector.hh>
 /// Event action class
 ///
 
 class B1EventAction : public G4UserEventAction
 {
 static int evNo;
+public:
+static int evMultiplicity;
+static int genuineEventCounter;
+static std::vector<G4String> volName;
+static std::vector<G4double> energy;
+static std::vector<G4ThreeVector> position;
+
   public:
+	static int GetEventMultiplicity(){return evMultiplicity;}
+	static int GetEventNum(){return evNo;}
     B1EventAction();
     virtual ~B1EventAction();
     
