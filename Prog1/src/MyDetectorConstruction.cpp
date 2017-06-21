@@ -61,15 +61,45 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
 
  
 
-  //Lets try to build material from NIST database
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,15.*cm);
-  G4Material *Pb=nist->FindOrBuildMaterial("G4_Pb");
-  G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,Pb,"LogicalLeadBlock");
-  G4VPhysicalVolume *phyLeadBlock = new G4PVPlacement(0,
+  //Scan Horn
+  G4Box *scanHorn = new G4Box("ScanHorn",50.*cm,10.*cm,50.*cm);
+  G4Material *scanHornMat = nist->FindOrBuildMaterial("G4_Galactic");
+  G4LogicalVolume *logicalScanHorn = new G4LogicalVolume(scanHorn,scanHornMat,"ScanHorn-Logical");
+  G4VPhysicalVolume *phyScanHorn = new G4PVPlacement(0,
                             //G4ThreeVector(),
-                            G4ThreeVector(),
-                            logicalLeadBlock,
-                            "PhysicalWorld",
+                            G4ThreeVector(0.,0.,20.*cm),
+                            logicalScanHorn,
+                            "PhysicalScanHorn",
+                            logicWorld,
+                            false,
+                            0,
+                            checkOverlaps);
+
+  //Titanium Foil
+  G4Box *tiFoil = new G4Box("TiFoil",50.*cm,10.*cm,.025*mm);
+  G4Material *foilMat = nist->FindOrBuildMaterial("G4_Ti");
+  G4LogicalVolume *logicalTiFoil = new G4LogicalVolume(tiFoil,foilMat,"'TiFoil-Logical");
+  G4VPhysicalVolume *phyTiFoil = new G4PVPlacement(0,
+                            //G4ThreeVector(),
+                            G4ThreeVector(0.,0.,-30.0025*cm),
+                            logicalTiFoil,
+                            "PhysicalTiFoil",
+                            logicWorld,
+                            false,
+                            0,
+                            checkOverlaps);
+
+
+
+  //Lets try to build material from NIST database
+  G4Box *taTarget = new G4Box("TantalumTarget",50.*cm,10.*cm,1.5*cm);
+  G4Material *ta = nist->FindOrBuildMaterial("G4_Ta");
+  G4LogicalVolume *logicalTaTarget = new G4LogicalVolume(taTarget,ta,"TaTarget-Logical");
+  G4VPhysicalVolume *phyTaTarget = new G4PVPlacement(0,
+                            //G4ThreeVector(),
+                            G4ThreeVector(0.,0.,-50.*cm),
+                            logicalTaTarget,
+                            "PhysicalTaTarget",
                             logicWorld,
                             false,
                             0,
