@@ -1,0 +1,20 @@
+#ifndef MyRandom_h
+#define MyRandom_h
+#include <iostream>
+#include <G4ThreeVector.hh>
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include <random>
+
+G4ThreeVector GenRandomPoint(){
+
+  
+  G4double x = 5*mm*G4UniformRand();
+  G4double y = 5*mm*G4UniformRand();
+  G4double z = 0.;//G4UniformRand();
+
+  return G4ThreeVector(x,y,z);
+
+}
+
+#endif
