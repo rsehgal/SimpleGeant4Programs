@@ -56,28 +56,17 @@ TVector3 Helpers::GetOtherVector(TVector3 R1){
 	nbin_Theta=361/delTheta;
 	nbin_Phi=361/delPhi;
 	TVector3 R2(0.000000001,0.0000000001,0.00000000001);
-	for (int i=0; i<nbin_Theta;++i)
+	do //for (int i=0; i<nbin_Theta;++i)
 	{
 
 		R2.SetMag(R1.Mag());
-		R2.SetTheta(th*dtr);
-	    th=th+delTheta;
-		phi=0.0;
-		for (int j=0; j<nbin_Phi;++j)
-		{
-		R2.SetPhi(phi*dtr);
-	    RelAng=R1.Angle(R2)*rtd;
-		phi=phi+delPhi;
-		if((RelAng > 174.9999) && (RelAng < 175.0001)){
-		//	std::cout <<" Raman :  "<<RelAng<<"    "<< R1.Mag() <<" " << R2.Mag() <<" "<< R2.Theta()*rtd<<"  "<< R2.Phi()*rtd << std::endl;
-			break;
-			}
-		}
+		th = unifRand(0,2*M_PI);
+		phi = unifRand(-1*M_PI,M_PI);
+		R2.SetTheta(th);
+		R2.SetPhi(phi);
+		RelAng=R1.Angle(R2)*rtd;
 
-		if((RelAng > 174.9999) && (RelAng < 175.0001))
-			break;
-
-	}
+	} while((RelAng < 174.9999) || (RelAng > 175.0001));
 
 	return R2;
 }
