@@ -34,13 +34,17 @@ file(COPY ${MAC_FILES} DESTINATION ${PROJECT_SOURCE_DIR}/build)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/modules)
 
+find_package(ROOT REQUIRED)
+include_directories(AFTER SYSTEM ${ROOT_INCLUDE_DIR})
+
+
 #find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 include_directories(../..)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh ../../base/Vector3D.h) 
+file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh) 
 
 add_executable(main main.cpp ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
+target_link_libraries(main ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)
