@@ -73,12 +73,14 @@ if(1)
    std::cout<<"===========================================================" << std::endl;
    }
  // G4ThreeVector  newVec = GetOtherVector(initial);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 ));
+  //fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 ));
+   fParticleGun->SetParticlePosition(rand);
   fParticleGun->SetParticleMomentumDirection(initial);
 
   fParticleGun->GeneratePrimaryVertex(event);
 
-fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 ));
+//fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0 ));
+  fParticleGun->SetParticlePosition(rand);
   fParticleGun->SetParticleMomentumDirection(newVec);
 fParticleGun->GeneratePrimaryVertex(event);
    //fParticleGun->SetParticlePosition(G4ThreeVector(50 * cm, 0., -120 * cm));
