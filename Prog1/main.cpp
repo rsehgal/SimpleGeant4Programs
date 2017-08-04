@@ -5,6 +5,7 @@
 #include "MyDetectorConstruction.h"
 #include "QBBC.hh"
 #include "FTFP_BERT.hh"
+#include "QGSP_BIC_HP.hh"
 #include "B1ActionInitialization.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -49,7 +50,8 @@ int main(int argc, char *argv[]){
   //runManager->SetUserInitialization(new MyPhysics);
   
   //Using Pre defined PhysicsList
-  runManager->SetUserInitialization(new FTFP_BERT);
+  //runManager->SetUserInitialization(new FTFP_BERT);
+  runManager->SetUserInitialization(new QGSP_BIC_HP);
 
   //Primary Generator Action
   //runManager->SetUserAction(new MyPrimaryGeneratorAction());

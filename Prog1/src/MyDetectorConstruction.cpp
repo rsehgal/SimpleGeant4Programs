@@ -47,13 +47,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4LogicalVolume* logicWorld =                         
     new G4LogicalVolume(solidWorld,          //its solid
                         world_mat,           //its material
-                        "World");            //its name
+                        "World-Logical");            //its name
                                    
   G4VPhysicalVolume* physWorld = 
     new G4PVPlacement(0,                     //no rotation
                       G4ThreeVector(),       //at (0,0,0)
                       logicWorld,            //its logical volume
-                      "World",               //its name
+                      "World-Physical",               //its name
                       0,                     //its mother  volume
                       false,                 //no boolean operation
                       0,                     //copy number
@@ -69,11 +69,26 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             //G4ThreeVector(),
                             G4ThreeVector(),
                             logicalLeadBlock,
-                            "PhysicalWorld",
+                            "Physical-LeadBlock",
                             logicWorld,
                             false,
                             0,
                             checkOverlaps);
+
+
+  G4Box *carbonFoil = new G4Box("CarbonFoil",5.*cm,5.*cm,0.5*cm);
+    G4Material *C=nist->FindOrBuildMaterial("G4_C");
+    G4LogicalVolume *logicalCarbonFoil = new G4LogicalVolume(carbonFoil,C,"LogicalCarbonFoil");
+    G4VPhysicalVolume *phyCarbonFoil = new G4PVPlacement(0,
+                              //G4ThreeVector(),
+                              G4ThreeVector(0,0,-40*cm),
+                              logicalCarbonFoil,
+                              "Physical-CarbonFoil",
+                              logicWorld,
+                              false,
+                              0,
+                              checkOverlaps);
+
 
 
 
