@@ -62,7 +62,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
  
 
   //Lets try to build material from NIST database
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,15.*cm);
+ /* G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,15.*cm);
   G4Material *Pb=nist->FindOrBuildMaterial("G4_Pb");
   G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,Pb,"LogicalLeadBlock");
   G4VPhysicalVolume *phyLeadBlock = new G4PVPlacement(0,
@@ -74,7 +74,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             false,
                             0,
                             checkOverlaps);
-
+*/
 
   G4Box *carbonFoil = new G4Box("CarbonFoil",5.*cm,5.*cm,0.5*cm);
     G4Material *C=nist->FindOrBuildMaterial("G4_C");
@@ -88,6 +88,20 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                               false,
                               0,
                               checkOverlaps);
+                              
+    G4Box *galFoil = new G4Box("GalFoil",50.*cm,50.*cm,0.0005*cm);
+    G4Material *gal=nist->FindOrBuildMaterial("G4_Galactic");
+    G4LogicalVolume *logicalGalFoil = new G4LogicalVolume(galFoil,gal,"LogicalGalFoil");
+    G4VPhysicalVolume *phyGalFoil = new G4PVPlacement(0,
+                              //G4ThreeVector(),
+                              G4ThreeVector(0,0,-35*cm),
+                              logicalGalFoil,
+                              "Physical-GalFoil",
+                              logicWorld,
+                              false,
+                              0,
+                              checkOverlaps);
+
 
 
 

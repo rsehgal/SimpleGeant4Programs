@@ -87,13 +87,19 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 	  }
  
 */
-      if (track->GetParentID()>0 &&
+if(touch2->GetVolume()->GetName()=="Physical-GalFoil" ) //&& point2->GetStepStatus()==fGeomBoundary)
+//std::cout<< "Name : " << touch1->GetVolume()->GetName() << " : " << "Location : " << point1->GetStepStatus() << " : " << fGeomBoundary <<  std::endl;
+{
+  std::cout << "ParentID : " <<  track->GetParentID() << std::endl;
+/*    if (track->GetParentID()>0 &&
        track->GetParticleDefinition() == G4Gamma::GammaDefinition()) {
        std::cout<<"Gamma Detected as Secondary Particle........."<< std::endl;
        G4double x  = track->GetVertexPosition().x();
        G4double y  = track->GetVertexPosition().y();
        G4double z  = track->GetVertexPosition().z();
    }
+*/
+}
 
   }
 
