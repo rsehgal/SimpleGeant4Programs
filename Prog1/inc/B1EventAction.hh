@@ -23,46 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+// $Id: B1EventAction.hh 75216 2013-10-29 16:08:11Z gcosmo $
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+/// \file B1EventAction.hh
+/// \brief Definition of the B1EventAction class
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-//#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#ifndef B1EventAction_h
+#define B1EventAction_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4UserEventAction.hh"
+#include "globals.hh"
+#include <vector>
+#include <G4String.hh>
+#include <G4ThreeVector.hh>
+/// Event action class
+///
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1ActionInitialization::~B1ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
+class B1EventAction : public G4UserEventAction
 {
-//  SetUserAction(new B1RunAction);
-}
+static int evNo;
+public:
+/*static int evMultiplicity;
+static int genuineEventCounter;
+static std::vector<G4String> volName;
+static std::vector<G4double> energy;
+static std::vector<G4double> vertexEnergy;
+static std::vector<G4ThreeVector> position;
+*/
+
+  public:
+//	static int GetEventMultiplicity(){return evMultiplicity;}
+//	static int GetEventNum(){return evNo;}
+    B1EventAction();
+    virtual ~B1EventAction();
+    
+    virtual void BeginOfEventAction(const G4Event* event);
+    virtual void EndOfEventAction(const G4Event* event);
+
+    void AddEdep(G4double edep) { fEdep += edep; }
+
+  private:
+    G4double  fEdep;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
-{
-  SetUserAction(new MyPrimaryGeneratorAction);
-//  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
+#endif
 
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    

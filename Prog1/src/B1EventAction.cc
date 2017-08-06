@@ -23,46 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+// $Id: B1EventAction.cc 75117 2013-10-28 09:38:37Z gcosmo $
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+/// \file B1EventAction.cc
+/// \brief Implementation of the B1EventAction class
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-//#include "B1RunAction.hh"
 #include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+//#include "B1Run.hh"
+
+#include "G4Event.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
+int B1EventAction::evNo = 0;
+/*
+int B1EventAction::evMultiplicity = 0;
+int B1EventAction::genuineEventCounter = 0;
+std::vector<G4String> B1EventAction::volName({"Hello"});
+std::vector<G4double> B1EventAction::energy({0.});
+std::vector<G4double> B1EventAction::vertexEnergy({0.});
+std::vector<G4ThreeVector> B1EventAction::position({G4ThreeVector(0.,0.,0.)});
+*/
+B1EventAction::B1EventAction()
+: G4UserEventAction(),
+  fEdep(0.)
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1EventAction::~B1EventAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1ActionInitialization::~B1ActionInitialization()
-{}
+void B1EventAction::BeginOfEventAction(const G4Event*)
+{ evNo++;
+  std::cout << "======== Raman: Event no : "<< evNo << "  started =======" << std::endl;
+  fEdep = 0.;
+//  evMultiplicity=0;
+//  volName.clear();
+//  energy.clear();
+//  position.clear();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
-{
-//  SetUserAction(new B1RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
-{
-  SetUserAction(new MyPrimaryGeneratorAction);
-//  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
+void B1EventAction::EndOfEventAction(const G4Event*)
+{  
+ /* double E1,E2,th1,th2,phi1,phi2,erel,c12;   //declaration of energy and theta_phi
+  th1=acos(z1/r);
+  th2=acos(z2/r);
+  phi1=atan(y1/x1);
+  phi2=atan(y2/x2);
+  c12=cos(th1)*cos(th2)+(sin(th1)*sin(th2))*cos(phi1-phi2);
+  erel=(1/2)*(E1+E2-2*sqrt(E1*E2*C12));      // definition of relative energy
+*/
+  // accumulate statistics in B1Run
 
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
+/*
+  B1Run* run 
+    = static_cast<B1Run*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->AddEdep(fEdep);
+ // std::cout << "======== Event no : "<< evNo << "  ended  =======" << std::endl;
+  if(evMultiplicity == 2){
+  	  genuineEventCounter++;
+  	  std::cout<<"Event Num : "<< evNo <<" :: EventMultiplicity : " << evMultiplicity << " :: DetectorNames : "
+  			  << volName[0] << " : " << volName[1]
+			  << " :: Position : " << position[0] <<" : "<< position[1]
+			  << " :: VertexEnergy : "<< vertexEnergy[0] <<" : Energy " << energy[0]
+			  << " :: VertexEnergy : "<< vertexEnergy[1] <<" : Energy " << energy[1] << std::endl;
+    }
+*/
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
