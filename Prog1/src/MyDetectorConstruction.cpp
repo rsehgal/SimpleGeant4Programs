@@ -71,7 +71,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             //G4ThreeVector(),
                             G4ThreeVector(),
                             logicalLeadBlock,
-                            "PhysicalWorld",
+                            "Physical-LEAD-Block",
                             logicWorld,
                             false,
                             0,

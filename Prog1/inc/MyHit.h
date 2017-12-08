@@ -19,6 +19,7 @@ class MyHit : public G4VHit {
 
 private:
 	Vec_t fPosition;
+	G4String fName;
 
 public:
 	MyHit();
@@ -30,6 +31,14 @@ public:
     inline void operator delete(void *aHit);
     void Draw() const{}
     void Print() const{}
+
+    void SetName(G4String name){
+    	fName = name;
+    }
+
+    G4String GetName(){
+    	return fName;
+    }
 
 	void SetPosition(Vec_t position){
 		fPosition = position;

@@ -48,10 +48,9 @@ void MySD::Initialize(G4HCofThisEvent* hce)
 G4bool MySD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {
-	std::cout<<"RAMAN Entered ProcessHits Of SD" << std::endl;
+	std::cout<<"SEHGAL Entered ProcessHits Of SD" << std::endl;
   // energy deposit
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  std::cout<<"Energy Deposited in the Step : " << edep << std::endl;
+
 
   //if (edep==0.) return false;
 
@@ -65,6 +64,13 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
 */
   newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition());
+  G4TouchableHandle touchable = aStep->GetPreStepPoint()->GetTouchableHandle();
+  newHit->SetName(touchable->GetVolume(0)->GetName());
+
+  G4double edep = aStep->GetTotalEnergyDeposit();
+
+  std::cout<<"Volume Name : " << newHit->GetName() << std::endl;
+  std::cout<<"Energy Deposited in the Step : " << edep << std::endl;
   std::cout<<"Position : " << newHit->GetPosition() << std::endl;
   fHitsCollection->insert( newHit );
 
