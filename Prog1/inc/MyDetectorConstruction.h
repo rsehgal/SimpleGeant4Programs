@@ -14,5 +14,6 @@ public:
 	MyDetectorConstruction();
 	~MyDetectorConstruction();
 	G4VPhysicalVolume* Construct();
+	virtual void ConstructSDandField();
 };
 #endif

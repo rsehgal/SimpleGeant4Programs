@@ -14,6 +14,8 @@
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+#include "G4SDManager.hh"
+#include "MySD.h"
 
 MyDetectorConstruction::MyDetectorConstruction(){
 
@@ -80,3 +82,14 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
 	return physWorld;
 
 }
+void MyDetectorConstruction::ConstructSDandField()
+{
+	G4String myBlockSDname = "MyBlockSD";
+	MySD* mySD = new MySD(myBlockSDname, "MyBlockHitsCollection");
+	G4SDManager::GetSDMpointer()->AddNewDetector(mySD);
+	// Setting aTrackerSD to all logical volumes with the same name
+	// of "Chamber_LV".
+	SetSensitiveDetector("LogicalLeadBlock", mySD, true);
+
+}
+
