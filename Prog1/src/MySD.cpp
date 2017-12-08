@@ -72,6 +72,7 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   std::cout<<"Volume Name : " << newHit->GetName() << std::endl;
   std::cout<<"Energy Deposited in the Step : " << edep << std::endl;
   std::cout<<"Position : " << newHit->GetPosition() << std::endl;
+  std::cout<<"Paticle Name : "<< (aStep->GetTrack()->GetDefinition()->GetParticleName()) << std::endl;
   fHitsCollection->insert( newHit );
 
   //newHit->Print();
