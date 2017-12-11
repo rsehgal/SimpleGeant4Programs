@@ -30,6 +30,7 @@ public:
 
 private:
 	    MyHitsCollection* fHitsCollection;
+	    static int stepNum;
 
 };
 

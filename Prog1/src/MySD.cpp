@@ -13,6 +13,9 @@
 #include "G4ios.hh"
 #include "G4SteppingManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4VProcess.hh"
+
+int MySD::stepNum = 0;
 
 /*MySD::MySD() {
 	// TODO Auto-generated constructor stub
@@ -69,14 +72,24 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   G4TouchableHandle touchable = aStep->GetPreStepPoint()->GetTouchableHandle();
   newHit->SetName(touchable->GetVolume(0)->GetName());
 
-  G4double edep = aStep->GetTotalEnergyDeposit();
+
 
   std::cout<<"Volume Name : " << newHit->GetName() << std::endl;
-  std::cout<<"Energy Deposited in the Step : " << edep << std::endl;
   std::cout<<"Position : " << newHit->GetPosition() << std::endl;
-  std::cout<<"Paticle Name : "<< (aStep->GetTrack()->GetDefinition()->GetParticleName()) << std::endl;
+  G4double edep = aStep->GetTotalEnergyDeposit();
+    std::cout<<"Energy Deposited in the Step : " << edep << std::endl;
+  std::cout<<"Paticle Name : "<< (aStep->GetTrack()->GetDefinition()->GetParticleName()) << " KineticEnergy : "
+		  <<  aStep->GetTrack()->GetKineticEnergy() << std::endl;
 
-  std::cout<<" ================ Trying to fetch secondaries produced in the current step ==================" << std::endl;
+
+  //Trying to get Info about the PROCESS that defined the current step
+  G4StepPoint* point2 = aStep->GetPostStepPoint();
+  const G4VProcess* aProcess = point2->GetProcessDefinedStep();
+  std::cout<< "Process Involved : " << aProcess->GetProcessName() << std::endl;
+
+
+  std::cout<<" ================ Trying to fetch secondaries produced in the current step === With TrackID " <<
+		  aStep->GetTrack()->GetTrackID() << "===============" << "  ParentID : " << aStep->GetTrack()->GetParentID() << std::endl;
   const std::vector<const G4Track*>* secondaries = aStep->GetSecondaryInCurrentStep();
   for(int i = 0 ; i < secondaries->size() ; i++){
 	  std::cout << "SecondaryName : " << (secondaries->at(i))->GetDefinition()->GetParticleName() << std::endl;
