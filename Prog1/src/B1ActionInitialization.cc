@@ -57,8 +57,11 @@ void B1ActionInitialization::BuildForMaster() const
 void B1ActionInitialization::Build() const
 {
   //Using before
-  //SetUserAction(new MyPrimaryGeneratorAction);
+#ifndef USE_CRY
+  SetUserAction(new MyPrimaryGeneratorAction);
+#else
 	SetUserAction(new MyPrimaryGeneratorAction(""));
+#endif
 
 
 //  SetUserAction(new B1RunAction);
