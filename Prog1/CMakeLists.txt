@@ -13,6 +13,9 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/modules)
+include(MacroUtilities)
+
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -26,7 +29,13 @@ else()
 endif()
 
 #----------------------------------------------------------------------------
+option(CRY "Enable CRY library for cosmic event generation" OFF)
 
+if(CRY)
+add_definitions(-DUSE_CRY)
+Find_package(CRY REQUIRED)
+include_directories(${CRY_INCLUDE_DIR})
+endif(CRY)
 
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/MacFiles/*)
 message(STATUS ${MAC_FILES})
@@ -41,5 +50,5 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cc
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh ../../base/Vector3D.h) 
 
 add_executable(main main.cpp ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
+target_link_libraries(main ${Geant4_LIBRARIES} ${CRY_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)

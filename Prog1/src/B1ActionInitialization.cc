@@ -56,7 +56,11 @@ void B1ActionInitialization::BuildForMaster() const
 
 void B1ActionInitialization::Build() const
 {
-  SetUserAction(new MyPrimaryGeneratorAction);
+  //Using before
+  //SetUserAction(new MyPrimaryGeneratorAction);
+	SetUserAction(new MyPrimaryGeneratorAction(""));
+
+
 //  SetUserAction(new B1RunAction);
   
 //  B1EventAction* eventAction = new B1EventAction;
