@@ -29,6 +29,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef USE_CRY
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "MyPrimaryGeneratorAction.h"
@@ -95,6 +96,6 @@ void PrimaryGeneratorMessenger::SetNewValue(
    { Action->CRYFromFile(newValue); }
 
 }
-
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

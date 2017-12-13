@@ -32,6 +32,7 @@
 #ifndef PrimaryGeneratorMessenger_h
 #define PrimaryGeneratorMessenger_h 1
 
+#ifdef USE_CRY
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
@@ -60,6 +61,6 @@ class PrimaryGeneratorMessenger: public G4UImessenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif
 #endif
 
