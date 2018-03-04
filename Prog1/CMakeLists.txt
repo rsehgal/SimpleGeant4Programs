@@ -27,6 +27,10 @@ endif()
 
 #----------------------------------------------------------------------------
 
+option(ReplaceTubeWithCone "Create tube using Cone." OFF)
+if(ReplaceTubeWithCone)
+add_definitions(-DUSE_CONS)
+endif(ReplaceTubeWithCone)
 
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/MacFiles/*)
 message(STATUS ${MAC_FILES})

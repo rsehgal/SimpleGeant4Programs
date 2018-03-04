@@ -14,5 +14,6 @@ public:
 	MyDetectorConstruction();
 	~MyDetectorConstruction();
 	G4VPhysicalVolume* Construct();
+    G4LogicalVolume* GetTube(std::string name,double rmin,double rmax,double dz);//, double sphi, double dphi);
 };
 #endif
