@@ -23,46 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+/// \file electromagnetic/TestEm5/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+// $Id: PhysicsListMessenger.cc 81528 2014-06-02 16:21:24Z vnivanch $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#include "PhysicsListMessenger.hh"
+
+#include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1ActionInitialization::~B1ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
+PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
+:G4UImessenger(),fPhysicsList(pPhys)
 {
-//  SetUserAction(new B1RunAction);
+  fPhysDir = new G4UIdirectory("/testem/phys/");
+  fPhysDir->SetGuidance("physics list commands");
+
+  fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
+  fListCmd->SetGuidance("Add modula physics list.");
+  fListCmd->SetParameterName("PList",false);
+  fListCmd->AvailableForStates(G4State_PreInit);
+  fListCmd->SetToBeBroadcasted(false);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
+PhysicsListMessenger::~PhysicsListMessenger()
 {
-  SetUserAction(new MyPrimaryGeneratorAction);
-  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
-  
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
+  delete fListCmd;
+  delete fPhysDir;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if( command == fListCmd )
+   { fPhysicsList->AddPhysicsList(newValue);}
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

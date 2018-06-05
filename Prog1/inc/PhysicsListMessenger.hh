@@ -23,46 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+/// \file electromagnetic/TestEm5/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+// $Id: PhysicsListMessenger.hh 81528 2014-06-02 16:21:24Z vnivanch $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#ifndef PhysicsListMessenger_h
+#define PhysicsListMessenger_h 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
+
+class PhysicsList;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1ActionInitialization::~B1ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
+class PhysicsListMessenger: public G4UImessenger
 {
-//  SetUserAction(new B1RunAction);
-}
+public:
+  
+  PhysicsListMessenger(PhysicsList* );
+ ~PhysicsListMessenger();
+    
+  virtual void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+  
+  PhysicsList*               fPhysicsList;
+    
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithAString*        fListCmd;    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
-{
-  SetUserAction(new MyPrimaryGeneratorAction);
-  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
-  
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,46 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+/// \file electromagnetic/TestEm5/src/StepMax.cc
+/// \brief Implementation of the StepMax class
 //
-/// \file B1ActionInitialization.cc
-/// \brief Implementation of the B1ActionInitialization class
+// $Id: StepMax.cc 98752 2016-08-09 13:44:40Z gcosmo $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "B1ActionInitialization.hh"
-#include "MyPrimaryGeneratorAction.h"
-#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#include "StepMax.hh"
+#include "StepMaxMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1ActionInitialization::B1ActionInitialization()
- : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1ActionInitialization::~B1ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ActionInitialization::BuildForMaster() const
+StepMax::StepMax(const G4String& processName)
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(0)
 {
-//  SetUserAction(new B1RunAction);
+  fMess = new StepMaxMessenger(this);
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+StepMax::~StepMax() { delete fMess; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle) 
+{ 
+  return (particle.GetPDGCharge() != 0.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void StepMax::SetMaxStep(G4double step) { fMaxChargedStep = step;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
+                                                  G4double,
+                                                  G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  G4double ProposedStep = DBL_MAX;
+
+  if((fMaxChargedStep > 0.) &&
+     (aTrack.GetVolume() != 0) &&
+     (aTrack.GetVolume()->GetName() == "Absorber"))
+     ProposedStep = fMaxChargedStep;
+
+  return ProposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1ActionInitialization::Build() const
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
-  SetUserAction(new MyPrimaryGeneratorAction);
-  SetUserAction(new B1RunAction);
-  
-  B1EventAction* eventAction = new B1EventAction;
-  SetUserAction(eventAction);
-  
-  SetUserAction(new B1SteppingAction(eventAction));
-}  
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
