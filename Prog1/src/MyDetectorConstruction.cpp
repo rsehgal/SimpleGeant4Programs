@@ -14,7 +14,7 @@
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
-
+#include "G4Tubs.hh"
 MyDetectorConstruction::MyDetectorConstruction(){
 
 }
@@ -85,6 +85,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
 
 */
 
+/*
  G4Box *AlSheet = new G4Box("AlBlock",5*cm,5*cm,15*cm);
 G4Material *Al=nist->FindOrBuildMaterial("G4_Al");
 G4LogicalVolume *logicalAlSheet = new G4LogicalVolume(AlSheet,Al,"LogicalAlSheet");
@@ -92,6 +93,41 @@ G4LogicalVolume *logicalAlSheet = new G4LogicalVolume(AlSheet,Al,"LogicalAlSheet
                                  G4ThreeVector(0.,0.,10*cm),
                                  logicalAlSheet,
                                 "PhysicalAlSheet",
+                                 logicWorld,
+                                 false,
+                                 0,
+                                 checkOverlaps);
+*/
+
+G4Tubs *AlTube = new G4Tubs("AlTubs",3*cm,5*cm,10*cm,0.,2*M_PI);
+G4Material *Al=nist->FindOrBuildMaterial("G4_Al");
+G4LogicalVolume *logicalAlTube = new G4LogicalVolume(AlTube,Al,"LogicalAlTube");
+G4VPhysicalVolume *phyAlTube = new G4PVPlacement(0,
+                                 G4ThreeVector(-10*cm,0.,20*cm),
+                                 logicalAlTube,
+                                "PhysicalAlTube",
+                                 logicWorld,
+                                 false,
+                                 0,
+                                 checkOverlaps);
+                                 
+G4VPhysicalVolume *phyAlTube2 = new G4PVPlacement(0,
+                                 G4ThreeVector(10*cm,0.,20*cm),
+                                 logicalAlTube,
+                                "PhysicalAlTube",
+                                 logicWorld,
+                                 false,
+                                 0,
+                                 checkOverlaps);
+                                 
+                                 
+G4Box *screen = new G4Box("screen",70*cm,70*cm,0.05*mm);
+G4Material *Gal=nist->FindOrBuildMaterial("G4_Galactic");
+G4LogicalVolume *logicalScreen = new G4LogicalVolume(screen,Gal,"LogicalGalScreen");
+ G4VPhysicalVolume *phyScreen = new G4PVPlacement(0,
+                                 G4ThreeVector(0.,0.,50*cm),
+                                 logicalScreen,
+                                "PhysicalScreen",
                                  logicWorld,
                                  false,
                                  0,

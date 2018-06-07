@@ -37,18 +37,24 @@ void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 
   //Generating random direction
   G4double theta = G4UniformRand()*360;
-  double r = 0.7*cm;
+  //double r = 0.7*cm;
+  double r = 50.*cm;
   r *= G4UniformRand();
   double x = r*std::cos(theta*M_PI/180.);
   double y = r*std::sin(theta*M_PI/180.);
-  double z = -5*cm;
+  double z = 0.*cm;
+  //double z = -5*cm;
 
   G4ThreeVector conePoint(x,y,z);
   
 
   fParticleGun->SetParticleEnergy(uGauss*MeV);
 
-  G4ThreeVector gunPosition(0., 0., -75 * cm);
+  //G4ThreeVector gunPosition(0., 0., -10 * cm);
+  
+  G4ThreeVector gunPosition(0., 0., -80 * cm);
+  
+  //G4ThreeVector gunPosition(0., 0., -75 * cm);
 
   G4ThreeVector dir = conePoint - gunPosition;
   dir = dir.unit();

@@ -45,12 +45,10 @@ G4Track* track = step->GetTrack();
   
 
   
-  if(touch1->GetVolume()->GetName()== "PhysicalAlSheet"
+  if(touch1->GetVolume()->GetName()== "PhysicalScreen"
 
                           && point1->GetStepStatus()==fGeomBoundary){
         std::ofstream outfile("exitPoints.txt",std::ios::app);
-//	std::cout << "\nHit Location : " << point2->GetPosition() << std::endl;
-        
 	//std::cout << "\nHit Location : " << point1->GetPosition() << std::endl;
          G4ThreeVector gunpos(0.,0.,-75*cm);
          G4ThreeVector exitPoint = point1->GetPosition();

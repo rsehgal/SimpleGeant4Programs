@@ -62,7 +62,7 @@ while(!exitfile.eof()){
 
 c->cd(4);
 TGraph *grExit = new TGraph(x.size(),&x[0],&y[0]);
-grExit->SetTitle("Exit Hit Points");
+grExit->SetTitle("Reconstructed two tubes");
 grExit->GetXaxis()->SetTitle("X Coordinate");
 grExit->GetYaxis()->SetTitle("Y Coordinate");
 grExit->Draw("AP");
