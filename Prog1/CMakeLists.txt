@@ -13,6 +13,9 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/modules)
+include(MacroUtilities)
+
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -33,6 +36,9 @@ message(STATUS ${MAC_FILES})
 #file(COPY ${MAC_FILES} DESTINATION ${PROJECT_SOURCE_DIR}/build)
 file(COPY ${MAC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+find_package(ROOT REQUIRED)
+include_directories(AFTER SYSTEM ${ROOT_INCLUDE_DIR})
+
 #find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
@@ -43,3 +49,9 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh .
 add_executable(main main.cpp ${sources} ${headers})
 target_link_libraries(main ${Geant4_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)
+
+
+add_executable(readData test/readData.cpp)
+target_link_libraries(readData ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+
+add_executable(stripcoord test/stripcoord.cpp)
