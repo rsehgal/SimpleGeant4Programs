@@ -14,10 +14,12 @@
 #include "B1EventAction.hh"
 #include <vector>
 
+//ROOT specific header files
+#include <TH1F.h>
+#include <TFile.h>
+
 using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ofstream* B1RunAction::myfile=NULL;
 
 double B1RunAction::fScatteringAngle = 0;
 
@@ -47,15 +49,11 @@ G4Run* B1RunAction::GenerateRun()
 
 void B1RunAction::BeginOfRunAction(const G4Run*)
 {
-  myfile = new ofstream(); 
-  myfile->open("energy.txt");
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
-#ifdef STORE
-  //fRootFile = new TFile ("1234.root","RECREATE","My GEANT4 simulation") ;
-  //fTree = new TTree ("BSC_DATA_TREE","My GEANT4 simulation") ;
-#endif
+fScatteringHist = new TH1F("ScatteringHistogram","ScatteingHistogram",100,-500,500);
+fRootFile = new TFile("data.root","RECREATE","SNP 2019 Geant4 Simulation");
 
  
 }
@@ -97,20 +95,16 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
 
   //Writing run.txt file
   ofstream fs("run.txt");
-  for(int i = 0 ; i < b1Run->GetScatteringAngleVector().size() ; i++){
-	  fs << b1Run->GetScatteringAngleVector()[i] << std::endl;
+  std::vector<double> scatteringAngleVector = b1Run->GetScatteringAngleVector();
+  for(int i = 0 ; i < scatteringAngleVector.size() ; i++){
+	  fs << scatteringAngleVector[i] << std::endl;
+	  fScatteringHist->Fill(scatteringAngleVector[i]*1000.);
   }
+  fScatteringHist->Draw();
+  fScatteringHist->Write();
+  fRootFile->Close();
+  delete fRootFile;
   fs.close();
-
-
-#ifdef STORE
-//  fTree->Write();
-//  fRootFile->Close();
-#endif
-
-  myfile->close();
-
-    delete myfile;
 
   std::cout <<"=========================================" << std::endl;
 }

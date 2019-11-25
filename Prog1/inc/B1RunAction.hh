@@ -6,31 +6,21 @@
 #include "globals.hh"
 //#include <fstream>
 #include <map>
-//#include "base/Global.h"
-
-
-//#include <TTree.h>
-//#include <TFile.h>
-
-//#include "Track.h"
 
 using namespace std;
 class G4Run;
 class G4LogicalVolume;
+class TH1F;
+class TFile;
 
 
 class B1RunAction : public G4UserRunAction
 {
   public:
-   static ofstream *myfile;
    static double fScatteringAngle;
+   TH1F *fScatteringHist;
+   TFile *fRootFile;
    int counter;
-
-#ifdef STORE
-   //static TTree *fTree;
-   //TFile *fRootFile;
-#endif
-    //static ofstream GetEnergyFile(){return myfile;}
 
     B1RunAction();
     virtual ~B1RunAction();

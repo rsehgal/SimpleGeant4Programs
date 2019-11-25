@@ -12,7 +12,8 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/modules)
+include(MacroUtilities)
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -27,10 +28,11 @@ endif()
 
 #----------------------------------------------------------------------------
 
+find_package(ROOT REQUIRED)
+include_directories(${ROOT_INCLUDE_DIR})
 
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/MacFiles/*)
 message(STATUS ${MAC_FILES})
-#file(COPY ${MAC_FILES} DESTINATION ${PROJECT_SOURCE_DIR}/build)
 file(COPY ${MAC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 #find_package(Geant4 REQUIRED)
@@ -41,5 +43,5 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cc
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh ../../base/Vector3D.h) 
 
 add_executable(main main.cpp ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
-#target_link_libraries(main ${Geant4_LIBRARIES} Tomo)
+target_link_libraries(main ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+
