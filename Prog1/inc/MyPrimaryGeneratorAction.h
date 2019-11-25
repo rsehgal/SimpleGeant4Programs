@@ -57,6 +57,7 @@ class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
+G4ParticleGun *gun2;
     //G4Box* fEnvelopeBox;
 };
 

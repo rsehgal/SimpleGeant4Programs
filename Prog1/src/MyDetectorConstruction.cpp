@@ -35,7 +35,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   //     
   // World
   //
-  G4double world_sizeXYZ = 200*cm;
+  G4double world_sizeXYZ = 400*cm;
   G4double world_sizeXY = 1.2*env_sizeXY;
   G4double world_sizeZ  = 1.2*env_sizeZ;
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
@@ -69,13 +69,40 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             //G4ThreeVector(),
                             G4ThreeVector(),
                             logicalLeadBlock,
-                            "PhysicalWorld",
+                            "PhysicalLead",
                             logicWorld,
                             false,
                             0,
                             checkOverlaps);
 
+G4Box *detectorShape = new G4Box("MuonDetector",100.*cm,100.*cm,0.5*cm);
 
+G4LogicalVolume *detectorLogical = new G4LogicalVolume(detectorShape,world_mat,"LogicalDetector");
+
+int counter=0;
+for (int i = -3; i <= 3 ;i++){
+
+double z=0.;
+if(i!=0)
+{
+std::cout << "I : "<< i <<" : Counter : " << counter << std::endl;
+counter++;
+z = i*45*cm;
+G4ThreeVector pos(0.,0.,z);
+
+//G4VPhysicalVolume *phyLeadBlock = 
+new G4PVPlacement(0,
+                            //G4ThreeVector(),
+                            pos,
+                            detectorLogical,
+                            "MuonDetector"+std::to_string(counter),
+                            logicWorld,
+                            false,
+                            0,
+                            checkOverlaps);
+}
+
+}
 
 	return physWorld;
 
