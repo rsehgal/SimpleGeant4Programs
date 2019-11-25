@@ -26,7 +26,13 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+option(USE_RND_DIRECTION "Use Muons of Random directions" OFF)
+
 #----------------------------------------------------------------------------
+if(USE_RND_DIRECTION)
+add_definitions(-DRANDOM_GUN)
+endif(USE_RND)
+
 
 find_package(ROOT REQUIRED)
 include_directories(${ROOT_INCLUDE_DIR})

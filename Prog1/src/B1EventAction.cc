@@ -42,14 +42,15 @@ void B1EventAction::EndOfEventAction(const G4Event*)
   //std::cout<<"Position Vector Size : "<< position.size() << std::endl;
   G4ThreeVector incoming = position[2]-position[0];
   G4ThreeVector outgoing = position[5]-position[3];
+  G4ThreeVector ref(0.,0.,-1.);
 
   //Filling Tracks
   
-  //TVector3 incomingR(incoming.x(),incoming.y(),incoming.z());
-  //TVector3 outgoingR(outgoing.x(),outgoing.y(),outgoing.z());
-  //B1RunAction::fScatteringAngle
-  double fScatteringAngle = outgoing.angle(incoming);
+  double angleIncoming = incoming.angle(ref);
+  double angleOutgoing = outgoing.angle(ref);
+  double fScatteringAngle = angleIncoming-angleOutgoing; //outgoing.angle(incoming);
   std::cout<<"Scattering Angle : " << fScatteringAngle << std::endl;
+  if(std::abs(fScatteringAngle) > .001)
   run->FillScatteringAngleVector(fScatteringAngle);
 
 }

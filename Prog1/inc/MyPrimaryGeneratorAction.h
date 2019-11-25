@@ -54,6 +54,10 @@ class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   
     // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+
+    double GenRandomDet(double min, double max) {
+	  return (rand() / (static_cast<double>(RAND_MAX) + 1.0)) * (max - min) + min;
+    }
   
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class

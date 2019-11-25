@@ -52,7 +52,7 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
-fScatteringHist = new TH1F("ScatteringHistogram","ScatteingHistogram",100,-500,500);
+fScatteringHist = new TH1F("ScatteringHistogram","ScatteingHistogram",100,-250,250);
 fRootFile = new TFile("data.root","RECREATE","SNP 2019 Geant4 Simulation");
 
  

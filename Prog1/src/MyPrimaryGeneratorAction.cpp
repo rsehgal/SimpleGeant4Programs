@@ -27,7 +27,17 @@ MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
 MyPrimaryGeneratorAction::~MyPrimaryGeneratorAction() { delete fParticleGun; }
 
 void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
-  fParticleGun->GeneratePrimaryVertex(event);
-  //fParticleGun->SetParticlePosition(G4ThreeVector(0., 30.*cm, 150 * cm ));
-  //fParticleGun->GeneratePrimaryVertex(event);
+
+//#define RANDOM_GUN
+#ifdef RANDOM_GUN
+double gunZ=150*cm;
+G4ThreeVector pt1(GenRandomDet(-50.*cm,50.*cm),  GenRandomDet(-50.*cm,50.*cm),  gunZ  );
+G4ThreeVector pt2(GenRandomDet(-50.*cm,50.*cm),GenRandomDet(-50.*cm,50.*cm), -gunZ);
+G4ThreeVector dir=(pt2-pt1).unit();
+fParticleGun->SetParticlePosition(pt1);
+fParticleGun->SetParticleMomentumDirection(dir);
+#endif
+
+fParticleGun->GeneratePrimaryVertex(event);
+  
 }
