@@ -2,6 +2,7 @@
 
 #include "G4Box.hh"
 #include "G4Electron.hh"
+#include "G4MuonPlus.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4ParticleDefinition.hh"
@@ -13,9 +14,10 @@
 #include "Randomize.hh"
 
 MyPrimaryGeneratorAction::MyPrimaryGeneratorAction() {
-  G4int n_particle = 1;
+  G4int n_particle = 10;
   fParticleGun = new G4ParticleGun(n_particle);
   //fParticleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
+  fParticleGun->SetParticleDefinition(G4MuonPlus::Definition());
 
   // Set the kinetic energy of the electrons to 50 keV
   // and tell the gun to emit them along the x-axis

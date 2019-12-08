@@ -48,7 +48,7 @@ stepNum++;
   if(isPrimary && touch1->GetVolume()->GetName().substr(0,12) == "MuonDetector"
                 && point1->GetStepStatus()==fGeomBoundary)
  {
-	std::cout << "Hitted Detector Name : "<< touch1->GetVolume()->GetName() << std::endl;
+	//std::cout << "Hitted Detector Name : "<< touch1->GetVolume()->GetName() << std::endl;
 	G4ThreeVector hitLocation = point1->GetPosition();
 	B1EventAction::position.push_back(hitLocation);
   }

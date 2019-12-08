@@ -6,6 +6,7 @@
 #include "G4Orb.hh"
 #include "G4Sphere.hh"
 #include "G4Trd.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -62,7 +63,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
  
 
   //Lets try to build material from NIST database
-  G4Box *leadBlock = new G4Box("LeadBlock",15.*cm,15.*cm,15.*cm);
+  //G4Box *leadBlock = new G4Box("LeadBlock",15.*cm,15.*cm,15.*cm);
+  //G4Orb *leadBlock = new G4Orb("LeadBlock",15.*cm);
+  G4Tubs *leadBlock = new G4Tubs("LeadBlock",15.*cm,20*cm,25*cm,0.,2*M_PI);
   G4Material *Pb=nist->FindOrBuildMaterial("G4_Pb");
   G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,Pb,"LogicalLeadBlock");
   G4VPhysicalVolume *phyLeadBlock = new G4PVPlacement(0,

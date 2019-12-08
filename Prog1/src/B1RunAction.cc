@@ -16,6 +16,8 @@
 
 //ROOT specific header files
 #include <TH1F.h>
+#include <TH2F.h>
+#include <TGraph.h>
 #include <TFile.h>
 
 using namespace std;
@@ -54,6 +56,7 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
 
 fScatteringHist = new TH1F("ScatteringHistogram","ScatteingHistogram",100,-250,250);
 fRootFile = new TFile("data.root","RECREATE","SNP 2019 Geant4 Simulation");
+fPocaXYHist = new TH2F("Hist of PoCA XY","Hist of PoCA XY",1000,-500.,500.,1000,-500.,500.);
 
  
 }
@@ -96,12 +99,28 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
   //Writing run.txt file
   ofstream fs("run.txt");
   std::vector<double> scatteringAngleVector = b1Run->GetScatteringAngleVector();
+  std::vector<G4ThreeVector> pocaPointVector = b1Run->GetPocaPtVector();
+  std::vector<double> x;
+  std::vector<double> y;
+  std::vector<double> z;
   for(int i = 0 ; i < scatteringAngleVector.size() ; i++){
 	  fs << scatteringAngleVector[i] << std::endl;
 	  fScatteringHist->Fill(scatteringAngleVector[i]*1000.);
+    fPocaXYHist->Fill(pocaPointVector[i].x(),pocaPointVector[i].y());
+    x.push_back(pocaPointVector[i].x());
+    y.push_back(pocaPointVector[i].y());
+    z.push_back(pocaPointVector[i].z());
   }
   fScatteringHist->Draw();
   fScatteringHist->Write();
+  fPocaXYHist->Draw();
+  fPocaXYHist->Write();
+
+  TGraph *fShape = new TGraph(x.size(),&x[0],&y[0]);
+  fShape->SetLineStyle(0);
+  fShape->SetLineColor(kWhite);
+  fShape->Draw("p");
+  fShape->Write();
   fRootFile->Close();
   delete fRootFile;
   fs.close();

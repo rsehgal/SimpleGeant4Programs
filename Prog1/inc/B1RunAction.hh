@@ -11,7 +11,9 @@ using namespace std;
 class G4Run;
 class G4LogicalVolume;
 class TH1F;
+class TH2F;
 class TFile;
+class TGraph;
 
 
 class B1RunAction : public G4UserRunAction
@@ -21,6 +23,9 @@ class B1RunAction : public G4UserRunAction
    TH1F *fScatteringHist;
    TFile *fRootFile;
    int counter;
+   TH2F *fPocaXYHist;
+   //TGraph *fShape;
+
 
     B1RunAction();
     virtual ~B1RunAction();

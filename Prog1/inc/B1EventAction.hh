@@ -21,6 +21,7 @@ static std::vector<G4ThreeVector> position;
 	static int GetEventNum(){return evNo;}
     B1EventAction();
     virtual ~B1EventAction();
+    G4ThreeVector POCA(G4ThreeVector p, G4ThreeVector u, G4ThreeVector q, G4ThreeVector v);
     
     virtual void BeginOfEventAction(const G4Event* event);
     virtual void EndOfEventAction(const G4Event* event);

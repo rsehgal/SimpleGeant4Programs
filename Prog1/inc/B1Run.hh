@@ -4,6 +4,7 @@
 
 #include "G4Run.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 class G4Event;
 
@@ -13,6 +14,7 @@ class G4Event;
 class B1Run : public G4Run
 {
 	std::vector<double> fScatteringAngleVect;
+    std::vector<G4ThreeVector> fPoCAPointVect;
 
   public:
     B1Run();
@@ -28,6 +30,8 @@ class B1Run : public G4Run
 
     }
     void FillScatteringAngleVector(double scatteringAngle){fScatteringAngleVect.push_back(scatteringAngle);}
+    void InsertPocaPoint(G4ThreeVector poca) {fPoCAPointVect.push_back(poca);}
+    std::vector<G4ThreeVector> GetPocaPtVector() const {return fPoCAPointVect;}
 
 
 };
