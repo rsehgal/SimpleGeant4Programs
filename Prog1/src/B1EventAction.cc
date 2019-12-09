@@ -83,7 +83,7 @@ void B1EventAction::EndOfEventAction(const G4Event*)
   double angleOutgoing = outgoing.angle(ref);
   double fScatteringAngle = angleIncoming-angleOutgoing; //outgoing.angle(incoming);
   //std::cout<<"Scattering Angle : " << fScatteringAngle << std::endl;
-  if(std::abs(fScatteringAngle) > .0005)
+  if(std::abs(fScatteringAngle) > .0001)
   {
     run->FillScatteringAngleVector(fScatteringAngle);
     G4ThreeVector poCA = POCA(position[0],incoming.unit(),position[3],outgoing.unit());

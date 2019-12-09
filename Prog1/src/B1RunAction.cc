@@ -121,6 +121,14 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
   fShape->SetLineColor(kWhite);
   fShape->Draw("p");
   fShape->Write();
+  
+
+  TGraph *fShapeYZ = new TGraph(y.size(),&y[0],&z[0]);
+  fShapeYZ->SetLineStyle(0);
+  fShapeYZ->SetLineColor(kWhite);
+  fShapeYZ->Draw("p");
+  fShapeYZ->Write();
+
   fRootFile->Close();
   delete fRootFile;
   fs.close();
