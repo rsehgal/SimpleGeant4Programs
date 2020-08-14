@@ -20,6 +20,7 @@ class MyHit : public G4VHit {
 private:
 	Vec_t fPosition;
 	G4String fName;
+	double fEDep;
 
 public:
 	MyHit();
@@ -30,7 +31,17 @@ public:
     inline void * operator new(size_t);
     inline void operator delete(void *aHit);
     void Draw() const{}
-    void Print() const{}
+    void Print() const{
+    	std::cout << "Volume Name : " << fName <<" : Energy Deposited : " << fEDep << std::endl;
+    }
+
+    void SetEnergyDeposited(double edep){
+    	fEDep=edep;
+    }
+
+    double GetEnergyDeposited() const{
+    	return fEDep;
+    }
 
     void SetName(G4String name){
     	fName = name;

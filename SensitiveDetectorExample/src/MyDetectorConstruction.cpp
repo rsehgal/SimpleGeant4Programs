@@ -63,18 +63,28 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
  
 
   //Lets try to build material from NIST database
-  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,10.*cm);
-  G4Material *Pb=nist->FindOrBuildMaterial("G4_Pb");
+  G4Box *leadBlock = new G4Box("LeadBlock",5.*cm,5.*cm,5.*cm);
+  G4Material *Pb=nist->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE");
   G4LogicalVolume *logicalLeadBlock = new G4LogicalVolume(leadBlock,Pb,"LogicalLeadBlock");
   MySD* mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
   G4SDManager *sdman = G4SDManager::GetSDMpointer();
   sdman->AddNewDetector(mySD);
   logicalLeadBlock->SetSensitiveDetector(mySD);
-  G4VPhysicalVolume *phyLeadBlock = new G4PVPlacement(0,
+  G4VPhysicalVolume *phyLeadBlock1 = new G4PVPlacement(0,
                             //G4ThreeVector(),
                             G4ThreeVector(),
                             logicalLeadBlock,
-                            "PhysicalWorld",
+                            "block1",
+                            logicWorld,
+                            false,
+                            0,
+                            checkOverlaps);
+
+  G4VPhysicalVolume *phyLeadBlock2 = new G4PVPlacement(0,
+                            //G4ThreeVector(),
+                            G4ThreeVector(0,0,-15*cm),
+                            logicalLeadBlock,
+                            "block2",
                             logicWorld,
                             false,
                             0,

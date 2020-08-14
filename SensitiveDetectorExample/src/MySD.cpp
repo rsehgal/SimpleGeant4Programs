@@ -76,7 +76,11 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   G4TouchableHandle touchable = aStep->GetPreStepPoint()->GetTouchableHandle();
   newHit->SetName(touchable->GetVolume(0)->GetName());
   G4String particleName=track->GetDefinition()->GetParticleName() ;
-  std::cout << particleName << "  " ;
+  std::cout << particleName << "  " << std::endl;
+  std::cout << "Energy deposited in current step in : "
+            << touchable->GetVolume(0)->GetName()
+            << " : " << aStep->GetTotalEnergyDeposit() << std::endl;
+  newHit->SetEnergyDeposited(aStep->GetTotalEnergyDeposit());
   fHitsCollection->insert( newHit );
   }
 //  std::cout << "New Hit position : " << newHit->GetPosition() << std::endl;
