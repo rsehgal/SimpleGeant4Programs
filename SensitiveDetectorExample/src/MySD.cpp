@@ -71,8 +71,10 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   newHit->SetEdep(edep);
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
 */
-  if(isPrimary){
+//  if(isPrimary)
+{
   newHit->SetPosition(aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetProcessName(aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
   G4TouchableHandle touchable = aStep->GetPreStepPoint()->GetTouchableHandle();
   newHit->SetName(touchable->GetVolume(0)->GetName());
   G4String particleName=track->GetDefinition()->GetParticleName() ;
