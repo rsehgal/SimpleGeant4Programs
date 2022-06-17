@@ -64,8 +64,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   // Making it Sensitive
   logicalDetPlane->SetSensitiveDetector(mySD);
 
-  double dist=50*cm;
-  unsigned short numOfDet = 10; 
+  unsigned short numOfDet = 4; 
+  double dist=100*cm;
   double baseVal = (-1*numOfDet/2)*dist+dist/2;
   for(unsigned int i = 0 ; i < numOfDet ; i++){
   double zval = baseVal+(i*dist);

@@ -42,7 +42,7 @@ MyPrimaryGeneratorAction::~MyPrimaryGeneratorAction() { delete fParticleGun; }
 
 void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 
-  double gunZ = 230 * cm;
+  double gunZ = 155 * cm;
   Muon *muon = new Muon(*lite_interface::MuonReader::instance()->GetMuon());
   // muon->Print();
 
@@ -55,8 +55,15 @@ void MyPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   G4ThreeVector ref(0., 0., -1.);
   Vector3D<double> pt1(Tracking::Global::GenRandomDet(-50. * cm, 50. * cm),
                        Tracking::Global::GenRandomDet(-50. * cm, 50. * cm), gunZ);
+  Vector3D<double> pt2(Tracking::Global::GenRandomDet(-50. * cm, 50. * cm),
+                       Tracking::Global::GenRandomDet(-50. * cm, 50. * cm), -1.*gunZ);
+ 
   fParticleGun->SetParticlePosition(G4ThreeVector(pt1.x(), pt1.y(), pt1.z()));
-  G4ThreeVector dir(muon->angleX, muon->angleY, muon->angleZ);
+
+  Vector3D<double> dirVec=(pt2-pt1).Unit();
+  //G4ThreeVector dir(muon->angleX, muon->angleY, muon->angleZ);
+  G4ThreeVector dir(dirVec.x(), dirVec.y(), dirVec.z());
+
   dir = dir.unit();
   //double muon_phi = acos(dir.x() / sin(dir.angle(ref))); 
   //double muon_phi = asin(dir.y() / sin(dir.angle(ref))); 

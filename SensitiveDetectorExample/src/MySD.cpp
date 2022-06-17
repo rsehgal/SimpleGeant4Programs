@@ -38,7 +38,7 @@ MySD::MySD(const G4String &name, const G4String &hitsCollectionName)
     : G4VSensitiveDetector(name), fHitsCollection(NULL) {
   collectionName.insert(hitsCollectionName);
   // unsigned short numOfStrips=10;
-  numOfStrips = 20;
+  numOfStrips = 100;
   stripSize = 100 * cm / numOfStrips;
   sampleHist = new TH1F("sampleHist", "sampleHist", numOfStrips, -50 * cm, 50 * cm);
   rndm = new TRandom;
@@ -115,11 +115,11 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
     G4int nofHits = fHitsCollection->entries();
     //    std::cout << RED << "-------->Hits Collection: in this event there are " << nofHits << " hits  " << RESET <<
     //    std::endl;
-    if (nofHits == 10) {
-    //if (nofHits == 4) {
+    //if (nofHits == 10) {
+    if (nofHits == 4) {
 
-      //double x[3], y[3], z[3];
-      double x[9], y[9], z[9];
+      double x[3], y[3], z[3];
+      //double x[9], y[9], z[9];
       x[0] = ((*fHitsCollection)[0]->GetRandomPosition()).x();
       y[0] = ((*fHitsCollection)[0]->GetRandomPosition()).y();
       z[0] = ((*fHitsCollection)[0]->GetRandomPosition()).z();
@@ -128,10 +128,10 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
       y[1] = ((*fHitsCollection)[1]->GetRandomPosition()).y();
       z[1] = ((*fHitsCollection)[1]->GetRandomPosition()).z();
 
-      x[2] = ((*fHitsCollection)[2]->GetRandomPosition()).x();
-      y[2] = ((*fHitsCollection)[2]->GetRandomPosition()).y();
-      z[2] = ((*fHitsCollection)[2]->GetRandomPosition()).z();
-
+      x[2] = ((*fHitsCollection)[3]->GetRandomPosition()).x();
+      y[2] = ((*fHitsCollection)[3]->GetRandomPosition()).y();
+      z[2] = ((*fHitsCollection)[3]->GetRandomPosition()).z();
+/*
       x[3] = ((*fHitsCollection)[3]->GetRandomPosition()).x();
       y[3] = ((*fHitsCollection)[3]->GetRandomPosition()).y();
       z[3] = ((*fHitsCollection)[3]->GetRandomPosition()).z();
@@ -155,22 +155,22 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
       x[8] = ((*fHitsCollection)[9]->GetRandomPosition()).x();
       y[8] = ((*fHitsCollection)[9]->GetRandomPosition()).y();
       z[8] = ((*fHitsCollection)[9]->GetRandomPosition()).z();
-
-      double actX = ((*fHitsCollection)[4]->GetPosition()).x();
-      double actY = ((*fHitsCollection)[4]->GetPosition()).y();
+*/
+      double actX = ((*fHitsCollection)[2]->GetPosition()).x();
+      double actY = ((*fHitsCollection)[2]->GetPosition()).y();
       // int binnum = sampleHist->GetXaxis()->FindBin(actY);
       // actY = sampleHist->GetXaxis()->GetBinCenter(binnum);
       // double actY = ((*fHitsCollection)[1]->GetPosition()).y();
-      double actZ = ((*fHitsCollection)[4]->GetPosition()).z();
+      double actZ = ((*fHitsCollection)[2]->GetPosition()).z();
 
-      double randX = ((*fHitsCollection)[4]->GetRandomPosition()).x();
-      double randY = ((*fHitsCollection)[4]->GetRandomPosition()).y();
+      double randX = ((*fHitsCollection)[2]->GetRandomPosition()).x();
+      double randY = ((*fHitsCollection)[2]->GetRandomPosition()).y();
 
-      TGraph *zx = new TGraph(9, z, x);
-      TGraph *zy = new TGraph(9, z, y);
+      TGraph *zx = new TGraph(3, z, x);
+      TGraph *zy = new TGraph(3, z, y);
 
-      TF1 *formulaZX = new TF1("linear_ZX", "[0]+[1]*x", -150 * cm, 150 * cm);
-      TF1 *formulaZY = new TF1("linear_ZY", "[0]+[1]*x", -150 * cm, 150 * cm);
+      TF1 *formulaZX = new TF1("linear_ZX", "[0]+[1]*x", -155 * cm, 155 * cm);
+      TF1 *formulaZY = new TF1("linear_ZY", "[0]+[1]*x", -155 * cm, 155 * cm);
 
       zx->Fit(formulaZX, "q");
       zy->Fit(formulaZY, "q");
@@ -185,7 +185,7 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
       // Output::instance()->FillDiffHist(actX-evalX);
       // if(formulaZY->GetChisquare() > 1)
       {
-        double diffVal = actY - evalY;
+        double diffVal = randY - evalY;
         // std::cout << "Diff : " << diffVal << std::endl;
         Output::instance()->FillDiffHist(diffVal);
       }
