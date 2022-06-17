@@ -12,13 +12,14 @@
 #include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
 #include "G4VHit.hh"
-
+#include "colors.h"
 using Vec_t = G4ThreeVector;
 
 class MyHit : public G4VHit {
 
 private:
   Vec_t fPosition;
+  Vec_t fRandomPos;
   G4String fName;
   G4String fProcessName;
 
@@ -32,9 +33,14 @@ public:
   inline void operator delete(void *aHit);
   void Draw() const {}
   void Print() const {
+
+    std::cout << "--------------------------------------" << std::endl;
+    std::cout << BLUE;
     std::cout << "Position : " << fPosition << std::endl;
+    std::cout << "Random Pos : " << fRandomPos << std::endl;
     std::cout << "Vol Name : " << fName << std::endl;
-	std::cout << "Process Name : " << fProcessName << std::endl;
+    std::cout << RESET;
+    // std::cout << "Process Name : " << fProcessName << std::endl;
   }
 
   void SetName(G4String name) { fName = name; }
@@ -42,8 +48,10 @@ public:
   G4String GetName() { return fName; }
 
   void SetPosition(Vec_t position) { fPosition = position; }
+  void SetRandomPosition(Vec_t position) { fRandomPos = position; }
 
   Vec_t GetPosition() { return fPosition; }
+  Vec_t GetRandomPosition() { return fRandomPos; }
   G4String GetProcessName() const { return fProcessName; }
   void SetProcessName(G4String processName) { fProcessName = processName; }
 };

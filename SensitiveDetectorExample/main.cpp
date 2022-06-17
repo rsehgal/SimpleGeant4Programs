@@ -13,10 +13,8 @@
 #include "Randomize.hh"
 
 #include "FTFP_BERT.hh"
-#include "QGSP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
-//#include <TFile.h>
-//#include "physicslist.hh"
+#include <TFile.h>
+///#include "physicslist.hh"
 
 /*Visualizer related includes*/
 //#include "EveVisualizer.h"
@@ -25,16 +23,16 @@
 //#include "OutputFile.h"
 //TFile *fp;
 
-//#include "Output.h"
-//#include "MuonReader.h"
-//#include "EcoMug.h"
-//#include "SingleTon_T.h"
+#include "Output.h"
+#include "MuonReader.h"
+#include "EcoMug.h"
+#include "SingleTon_T.h"
 
 int main(int argc,char** argv)
 {
   //SingleTon_T<EcoMug> *obj = SingleTon_T<EcoMug>::instance();
-  //lite_interface::MuonReader::instance("Muons-50L.root");
-  //Output::instance("acceptance.root");
+  lite_interface::MuonReader::instance("Muons-50L.root");
+  Output::instance("acceptance.root");
 
   // Detect interactive mode (if no arguments) and define UI session
   //
@@ -61,18 +59,14 @@ G4RunManager *runManager = new G4RunManager;
   runManager->SetUserInitialization(new MyDetectorConstruction());
 
   // Physics list
-  //G4VModularPhysicsList* physicsList = new FTFP_BERT;//QBBC;
-  //G4VModularPhysicsList* physicsList = new QGSP_BERT;//QBBC;
-  G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;//QBBC;
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;//QBBC;
   //physicsList->SetVerboseLevel(1);
-  //runManager->SetUserInitialization(physicsList);
+  runManager->SetUserInitialization(physicsList);
 
   //runManager->SetUserInitialization(new MYphysicslist());
-  runManager->SetUserInitialization(physicsList);
     
   // User action initialization
   runManager->SetUserInitialization(new B1ActionInitialization());
-
   
   // Initialize visualization
   //
@@ -104,7 +98,7 @@ G4RunManager *runManager = new G4RunManager;
   // owned and deleted by the run manager, so they should not be deleted 
   // in the main() program !
   
-  //Output::instance()->Close();
+  Output::instance()->Close();
   delete visManager;
   delete runManager;
   //fp->Close();

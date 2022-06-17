@@ -11,10 +11,11 @@
 #include "G4VSensitiveDetector.hh"
 #include "MyHit.h"
 #include "vector"
-
+#include <G4ThreeVector.hh>
 class G4Step;
 class G4HCofThisEvent;
-
+class TH1F;
+class TRandom;
 class MySD : public G4VSensitiveDetector {
 
 public:
@@ -29,9 +30,16 @@ public:
 	virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
 	static int numOfParticlesReached;
 
+        double GetRandom(double val);
 private:
 	    MyHitsCollection* fHitsCollection;
 	    static int stepNum;
+	    static unsigned short numOfStrips;
+	    static unsigned short stripSize;
+ 	    std::vector<G4ThreeVector> vecOfHitPts;
+
+  	    TH1F *sampleHist;
+	    TRandom *rndm;
 
 };
 

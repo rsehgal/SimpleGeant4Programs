@@ -12,7 +12,7 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/modules)
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -27,6 +27,13 @@ endif()
 
 #----------------------------------------------------------------------------
 
+find_package(TrackingLib REQUIRED)
+include_directories(${TrackingLib_INCLUDE_DIR})
+
+find_package(ROOT REQUIRED)
+include_directories(${ROOT_INCLUDE_DIRS})
+
+include_directories(${CMAKE_SOURCE_DIR}/inc)
 
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/MacFiles/*)
 message(STATUS ${MAC_FILES})
@@ -36,10 +43,12 @@ file(COPY ${MAC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 #find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
-include_directories(../..)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh ../../base/Vector3D.h) 
 
 add_executable(main main.cpp ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
+target_link_libraries(main ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${TrackingLib_LIBRARIES})
+
+add_executable(testRndm testRndm.cpp)
+target_link_libraries(testRndm ${ROOT_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)
