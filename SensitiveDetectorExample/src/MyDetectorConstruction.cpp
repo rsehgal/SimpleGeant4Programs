@@ -28,17 +28,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
   G4bool checkOverlaps = true;
 
   
-  // Envelope params
-  //
-  G4double env_sizeXY = 20*m, env_sizeZ = 30*m;
-  //G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
-  
   //     
   // World
   //
   G4double world_sizeXYZ = 200*cm;
-  G4double world_sizeXY = 1.2*env_sizeXY;
-  G4double world_sizeZ  = 1.2*env_sizeZ;
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
 
   G4Box* solidWorld =    
@@ -54,7 +47,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
     new G4PVPlacement(0,                     //no rotation
                       G4ThreeVector(),       //at (0,0,0)
                       logicWorld,            //its logical volume
-                      "World",               //its name
+                      "PhysicalWorld",               //its name
                       0,                     //its mother  volume
                       false,                 //no boolean operation
                       0,                     //copy number
@@ -74,7 +67,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct(){
                             //G4ThreeVector(),
                             G4ThreeVector(),
                             logicalLeadBlock,
-                            "PhysicalWorld",
+                            "Physical_Pb_Block",
                             logicWorld,
                             false,
                             0,

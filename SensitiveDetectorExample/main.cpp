@@ -1,101 +1,111 @@
-#include "G4RunManager.hh"
-#include "G4VModularPhysicsList.hh"
-#include "G4VUserPhysicsList.hh"
-#include "MyPrimaryGeneratorAction.h"
 #include "MyDetectorConstruction.h"
-#include "QBBC.hh"
-#include "FTFP_BERT.hh"
 #include "B1ActionInitialization.hh"
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
+//#include "G4RunManagerFactory.hh"
+#include "G4RunManager.hh"
 
 #include "G4UImanager.hh"
-#include "FTFP_BERT.hh"
+#include "QBBC.hh"
 
-
-//#include "PhysicsList.h"
-//#include "HodoScope.h"
-//#include "QGSP_BIC_EMY.hh"
-/*
-#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-*/
-
-//#include "GeantVisualizer.h"
-
 
 #include "Randomize.hh"
 
+//#include "FTFP_BERT.hh"
+#include "QGSP_BERT_HP.hh"
+//#include <TFile.h>
+//#include "physicslist.hh"
 
-int main(int argc, char *argv[]){
+/*Visualizer related includes*/
+//#include "EveVisualizer.h"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+//#include "OutputFile.h"
+//TFile *fp;
+
+//#include "Output.h"
+//#include "MuonReader.h"
+//#include "EcoMug.h"
+//#include "SingleTon_T.h"
+
+int main(int argc,char** argv)
+{
+  //SingleTon_T<EcoMug> *obj = SingleTon_T<EcoMug>::instance();
+  //lite_interface::MuonReader::instance("Muons-50L.root");
+  //Output::instance("acceptance.root");
+
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  // fp = new TFile("anal.root","RECREATE");
+  //fp->cd();
+  //lite_interface::OutputFile::instance("anal.root");
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  // Optionally: choose a different Random engine...
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
   
+  // Construct the default run manager
+  //
+//  auto* runManager =
+G4RunManager *runManager = new G4RunManager;
+    //G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
-  G4RunManager *runManager = new G4RunManager;
-  //G4VUserPhysicsList* phyList = new MyPhysics;
-
-  //Detector Construction
+  // Set mandatory initialization classes
+  //
+  // Detector construction
   runManager->SetUserInitialization(new MyDetectorConstruction());
-  //runManager->SetUserInitialization(new HodoScope());
 
-  //Physics List
-  //For user define PhysicsList uncomment the line below
-  //runManager->SetUserInitialization(new MyPhysics);
-  
-  //Using Pre defined PhysicsList
-  runManager->SetUserInitialization(new FTFP_BERT);
+  // Physics list
+  G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;//QBBC;
+  //G4VModularPhysicsList* physicsList = new FTFP_BERT;//QBBC;
+  //physicsList->SetVerboseLevel(1);
+  //runManager->SetUserInitialization(physicsList);
 
-  //Primary Generator Action
-  //runManager->SetUserAction(new MyPrimaryGeneratorAction());
-
+  //runManager->SetUserInitialization(new MYphysicslist());
+  runManager->SetUserInitialization(physicsList);
+    
   // User action initialization
   runManager->SetUserInitialization(new B1ActionInitialization());
-#ifdef G4VIS_USE
-    // Visualization manager construction
-    G4VisManager* visManager = new G4VisExecutive;
-    // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-    // G4VisManager* visManager = new G4VisExecutive("Quiet");
-    visManager->Initialize();
-#endif
 
-    // Get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
 
-    if (argc>1) {
-        // execute an argument macro file if exist
-        G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UImanager->ApplyCommand(command+fileName);
-    }
-    else {
-        //Needed with Qt sessions
-        // Initialize Geant4 kernel
-        runManager->Initialize();
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-        // start interactive session
-#ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-        UImanager->ApplyCommand("/control/execute init_vis.mac");
-#else
-        UImanager->ApplyCommand("/control/execute init.mac");
-#endif
-        if (ui->IsGUI())
-            UImanager->ApplyCommand("/control/execute gui.mac");
-        ui->SessionStart();
-        delete ui;
-#endif
-    }
+  // Process macro or start UI session
+  //
+  if ( ! ui ) { 
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+  else { 
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
-
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  // owned and deleted by the run manager, so they should not be deleted 
+  // in the main() program !
+  
+  //Output::instance()->Close();
+  delete visManager;
   delete runManager;
-
-  return 0;
-
+  //fp->Close();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

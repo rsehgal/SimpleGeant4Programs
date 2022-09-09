@@ -37,7 +37,7 @@ MySD::MySD(const G4String& name, const G4String& hitsCollectionName)
 void MySD::Initialize(G4HCofThisEvent* hce)
 {
   // Create hits collection
-	std::cout<<"RAMAN Entered Initialize Of SD" << std::endl;
+//	std::cout<<"RAMAN Entered Initialize Of SD" << std::endl;
   numOfParticlesReached++;
   fHitsCollection
     = new MyHitsCollection(SensitiveDetectorName, collectionName[0]);
@@ -76,21 +76,27 @@ G4bool MySD::ProcessHits(G4Step* aStep,
   G4TouchableHandle touchable = aStep->GetPreStepPoint()->GetTouchableHandle();
   newHit->SetName(touchable->GetVolume(0)->GetName());
   G4String particleName=track->GetDefinition()->GetParticleName() ;
-  std::cout << particleName << "  " ;
+  //std::cout << "===================" << particleName <<  "======================" << std::endl;
   fHitsCollection->insert( newHit );
   }
 //  std::cout << "New Hit position : " << newHit->GetPosition() << std::endl;
 
+  bool isSecondary = (track->GetParentID() == 1 );
+  G4String particleName=track->GetDefinition()->GetParticleName() ;
+  if(isSecondary && particleName=="neutron"){
+  std::cout << "***********" << particleName <<  "************" << std::endl;
+
+  }
   return true;
 }
 
 void MySD::EndOfEvent(G4HCofThisEvent*)
 {
-  std::cout <<"++++"<<std::endl;
-  std::cout << "No of Hits : " << fHitsCollection->entries() << std::endl;
-  std::cout<<"RAMAN Entered EndOfEvent Of SD" << std::endl;
+  //std::cout <<"++++"<<std::endl;
+  //std::cout << "No of Hits : " << fHitsCollection->entries() << std::endl;
+  //std::cout<<"RAMAN Entered EndOfEvent Of SD" << std::endl;
   //if ( verboseLevel>1 ) {
-  if(1){
+  if(0){
      G4int nofHits = fHitsCollection->entries();
      G4cout << G4endl
             << "-------->Hits Collection: in this event there are " << nofHits
