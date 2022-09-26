@@ -9,8 +9,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-MySteppingAction::MySteppingAction(MyEventAction* event)
-  : G4UserSteppingAction()
+MySteppingAction::MySteppingAction(MyEventAction *event)
+    : G4UserSteppingAction()
 //  , fEventAction(event)
 {}
 
@@ -20,23 +20,36 @@ MySteppingAction::~MySteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void MySteppingAction::UserSteppingAction(const G4Step* step)
-{
+void MySteppingAction::UserSteppingAction(const G4Step *step) {
 
-  //std::cout << "Entereed .. User Stepping Action.........." << std::endl;
-  static G4ParticleDefinition* opticalphoton =
-    G4OpticalPhoton::OpticalPhotonDefinition();
+  // std::cout << "Entereed .. User Stepping Action.........." << std::endl;
+  static G4ParticleDefinition *opticalphoton = G4OpticalPhoton::OpticalPhotonDefinition();
 
-  const G4ParticleDefinition* particleDef =
-    step->GetTrack()->GetDynamicParticle()->GetParticleDefinition();
+  const G4ParticleDefinition *particleDef = step->GetTrack()->GetDynamicParticle()->GetParticleDefinition();
 
-  //if(particleDef != opticalphoton)
-  //if(particleDef->GetParticleName() != "opticalphoton")
+  // if(particleDef != opticalphoton)
+  // if(particleDef->GetParticleName() != "opticalphoton")
   {
-    G4StepPoint* endPoint = step->GetPostStepPoint();
-    const G4VProcess* pds = endPoint->GetProcessDefinedStep();
-    G4String procname     = pds->GetProcessName();
-    std::cout << "Particle Def : " << particleDef->GetParticleName() <<"  : ProcessName : " << procname << std::endl;
+    G4StepPoint *endPoint = step->GetPostStepPoint();
+    G4StepPoint *startPoint = step->GetPreStepPoint();
+    const G4VProcess *pds = endPoint->GetProcessDefinedStep();
+    G4String procname = pds->GetProcessName();
+    // G4String volName = endPoint->GetPhysicalVolume()->GetName();
+    G4String volName = startPoint->GetPhysicalVolume()->GetName();
+    if (endPoint)
+      std::cout << "Particle Def : " << particleDef->GetParticleName() << "  : ProcessName : " << procname
+                << " : VolName : " << volName << std::endl;
+
+    G4TouchableHandle touch1 = startPoint->GetTouchableHandle();
+    if ((touch1->GetVolume()->GetName() == "Physical_PMT_0" || 
+	 touch1->GetVolume()->GetName() == "Physical_PMT_0" ||
+         touch1->GetVolume()->GetName() == "Physical_PMT_0" || 
+	 touch1->GetVolume()->GetName() == "Physical_PMT_3") &&
+         startPoint->GetStepStatus() == fGeomBoundary) {
+		
+		step->GetTrack()->SetTrackStatus(fStopAndKill);
+    }
+
     /*if(procname.compare("OpRayleigh") == 0)
       fEventAction->AddRayleigh();
     else if(procname.compare("OpAbsorption") == 0)
