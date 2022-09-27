@@ -17,6 +17,9 @@
 #include "MyDetectorConstruction.h"
 #include "MyDetectorMessenger.h"
 #include "G4RotationMatrix.hh"
+#include "G4SDManager.hh"
+#include "MySD.h"
+
 MyDetectorConstruction::MyDetectorConstruction() {}
 
 MyDetectorConstruction::~MyDetectorConstruction() {}
@@ -80,6 +83,13 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   G4Material *pmt_mat = nist->FindOrBuildMaterial("G4_Galactic");
   //G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, pmt_mat, "Logical_PMT");
   G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, fBlockMaterial, "Logical_PMT");
+
+  MySD* mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
+  G4SDManager *sdman = G4SDManager::GetSDMpointer();
+  sdman->AddNewDetector(mySD);
+  pmt_log->SetSensitiveDetector(mySD);
+
+
   G4VPhysicalVolume *phyPMT0 = new G4PVPlacement(0, G4ThreeVector(0., 0., 16. * cm), pmt_log, "Physical_PMT_0",
                                                  logicWorld, false, 0, checkOverlaps);
   G4VPhysicalVolume *phyPMT1 = new G4PVPlacement(0, G4ThreeVector(0., 0., -16. * cm), pmt_log, "Physical_PMT_1",

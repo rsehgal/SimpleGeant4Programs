@@ -26,7 +26,10 @@ else()
 endif()
 
 #----------------------------------------------------------------------------
-
+find_package(ROOT REQUIRED)
+include_directories(${ROOT_INCLUDE_DIRS})
+#message(STATUS "ROOT LIB : ${ROOT_LIBRARIES}")
+#message(STATUS "ROOT INC : ${ROOT_INCLUDE_DIRS}")
 
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/MacFiles/*)
 message(STATUS ${MAC_FILES})
@@ -41,5 +44,5 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cc
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh ../../base/Vector3D.h) 
 
 add_executable(main main.cpp ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
+target_link_libraries(main ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)

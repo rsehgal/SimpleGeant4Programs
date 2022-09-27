@@ -36,9 +36,9 @@ void MySteppingAction::UserSteppingAction(const G4Step *step) {
     G4String procname = pds->GetProcessName();
     // G4String volName = endPoint->GetPhysicalVolume()->GetName();
     G4String volName = startPoint->GetPhysicalVolume()->GetName();
-    if (endPoint)
+    /*if (endPoint)
       std::cout << "Particle Def : " << particleDef->GetParticleName() << "  : ProcessName : " << procname
-                << " : VolName : " << volName << std::endl;
+                << " : VolName : " << volName << std::endl;*/
 
     G4TouchableHandle touch1 = startPoint->GetTouchableHandle();
     if ((touch1->GetVolume()->GetName() == "Physical_PMT_0" || 
