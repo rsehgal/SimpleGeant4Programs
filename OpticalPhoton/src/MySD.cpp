@@ -83,7 +83,7 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
   }
 
   fWrite->Fill(photonCounter[0], photonCounter[1], photonCounter[2], photonCounter[3]);
-  if(!(fEventCounter%100) && fEventCounter!=0)
+  if(!(fEventCounter%10000) && fEventCounter!=0)
 	std::cout << "Processed : " << fEventCounter << " Events....." << std::endl;
 
 }

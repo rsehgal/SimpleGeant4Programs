@@ -7,7 +7,9 @@
 #include "G4NistManager.hh"
 #include "G4Orb.hh"
 #include "G4PVPlacement.hh"
+#include "G4RotationMatrix.hh"
 #include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4Sphere.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Trd.hh"
@@ -16,8 +18,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "MyDetectorConstruction.h"
 #include "MyDetectorMessenger.h"
-#include "G4RotationMatrix.hh"
-#include "G4SDManager.hh"
 #include "MySD.h"
 
 MyDetectorConstruction::MyDetectorConstruction() {}
@@ -29,17 +29,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   G4NistManager *nist = G4NistManager::Instance();
   G4bool checkOverlaps = true;
 
-  // Envelope params
-  //
-  G4double env_sizeXY = 20 * m, env_sizeZ = 30 * m;
-  // G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
-
-  //
   // World
-  //
   G4double world_sizeXYZ = 60 * cm;
-  G4double world_sizeXY = 1.2 * env_sizeXY;
-  G4double world_sizeZ = 1.2 * env_sizeZ;
   G4Material *world_mat = nist->FindOrBuildMaterial("G4_AIR");
 
   G4Box *solidWorld = new G4Box("World",                                                        // its name
@@ -74,45 +65,44 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   // fBlockMaterial = nist->FindOrBuildMaterial("G4_Pb");
   fBlockMaterial = fPstyrene;
   fLogicBlock = new G4LogicalVolume(leadBlock, fBlockMaterial, "LogicalScintillatorBlock");
-  G4VPhysicalVolume *phyLeadBlock =
-      new G4PVPlacement(0,
-                        // G4ThreeVector(),
-                        G4ThreeVector(), fLogicBlock, "PhysicalScintillatorBlock", logicWorld, false, 0, checkOverlaps);
+  // G4VPhysicalVolume *phyLeadBlock =
+  new G4PVPlacement(0,
+                    // G4ThreeVector(),
+                    G4ThreeVector(), fLogicBlock, "PhysicalScintillatorBlock", logicWorld, false, 0, checkOverlaps);
   // PMT
   G4Tubs *pmt = new G4Tubs("PMT", 0., 2. * cm, 1. * cm, 0., 2 * M_PI);
-  G4Material *pmt_mat = nist->FindOrBuildMaterial("G4_Galactic");
-  //G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, pmt_mat, "Logical_PMT");
+  // G4Material *pmt_mat = nist->FindOrBuildMaterial("G4_Galactic");
+  // G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, pmt_mat, "Logical_PMT");
   G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, fBlockMaterial, "Logical_PMT");
 
-  MySD* mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
+  MySD *mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
   G4SDManager *sdman = G4SDManager::GetSDMpointer();
   sdman->AddNewDetector(mySD);
   pmt_log->SetSensitiveDetector(mySD);
 
+  // G4VPhysicalVolume *phyPMT0 =
+  new G4PVPlacement(0, G4ThreeVector(0., 0., 16. * cm), pmt_log, "Physical_PMT_0", logicWorld, false, 0, checkOverlaps);
+  // G4VPhysicalVolume *phyPMT1 =
+  new G4PVPlacement(0, G4ThreeVector(0., 0., -16. * cm), pmt_log, "Physical_PMT_1", logicWorld, false, 1,
+                    checkOverlaps);
 
-  G4VPhysicalVolume *phyPMT0 = new G4PVPlacement(0, G4ThreeVector(0., 0., 16. * cm), pmt_log, "Physical_PMT_0",
-                                                 logicWorld, false, 0, checkOverlaps);
-  G4VPhysicalVolume *phyPMT1 = new G4PVPlacement(0, G4ThreeVector(0., 0., -16. * cm), pmt_log, "Physical_PMT_1",
-                                                 logicWorld, false, 1, checkOverlaps);
+  G4RotationMatrix *rm = new G4RotationMatrix;
+  rm->rotateY(90 * deg);
 
+  // G4VPhysicalVolume *phyPMT2 =
+  new G4PVPlacement(rm, G4ThreeVector(16. * cm, 0., 0.), pmt_log, "Physical_PMT_2", logicWorld, false, 2,
+                    checkOverlaps);
+  // G4VPhysicalVolume *phyPMT3 =
+  new G4PVPlacement(rm, G4ThreeVector(-16. * cm, 0., 0.), pmt_log, "Physical_PMT_3", logicWorld, false, 3,
+                    checkOverlaps);
+  /*  G4VPhysicalVolume *phyPMT4 = new G4PVPlacement(rm, G4ThreeVector(-16.*cm, 0., 5.*cm), pmt_log, "Physical_PMT_4",
+                                                   logicWorld, false, 4, checkOverlaps);
+  G4RotationMatrix *rm2 = new G4RotationMatrix;
+  rm2->rotateY(90*deg);
 
-G4RotationMatrix *rm = new G4RotationMatrix;
-rm->rotateY(90*deg);
-
-  G4VPhysicalVolume *phyPMT2 = new G4PVPlacement(rm, G4ThreeVector(16.*cm, 0., 0.), pmt_log, "Physical_PMT_2",
-                                                 logicWorld, false, 2, checkOverlaps);
-  G4VPhysicalVolume *phyPMT3 = new G4PVPlacement(rm, G4ThreeVector(-16.*cm, 0., 0.), pmt_log, "Physical_PMT_3",
-                                                 logicWorld, false, 3, checkOverlaps);
-/*  G4VPhysicalVolume *phyPMT4 = new G4PVPlacement(rm, G4ThreeVector(-16.*cm, 0., 5.*cm), pmt_log, "Physical_PMT_4",
-                                                 logicWorld, false, 4, checkOverlaps);
-G4RotationMatrix *rm2 = new G4RotationMatrix;
-rm2->rotateY(90*deg);
-
-  G4VPhysicalVolume *phyPMT5 = new G4PVPlacement(rm2, G4ThreeVector(-16.*cm, 0., -5.*cm), pmt_log, "Physical_PMT_5",
-                                                 logicWorld, false, 5, checkOverlaps);
-*/
-
-
+    G4VPhysicalVolume *phyPMT5 = new G4PVPlacement(rm2, G4ThreeVector(-16.*cm, 0., -5.*cm), pmt_log, "Physical_PMT_5",
+                                                   logicWorld, false, 5, checkOverlaps);
+  */
 
   // ------------ Generate & Add Material Properties Table ------------
   //
