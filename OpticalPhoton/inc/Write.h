@@ -7,6 +7,7 @@
 #define Write_h
 
 #include <string>
+#include <vector>
 
 class TTree;
 class TFile;
@@ -17,6 +18,11 @@ public:
   Tree();
   Tree(std::string filename);
   void Fill(unsigned int phot_0, unsigned int phot_1, unsigned int phot_2, unsigned int phot_3);
+  void FillTime(std::vector<unsigned int> phot_0, 
+                std::vector<unsigned int> phot_1, 
+                std::vector<unsigned int> phot_2, 
+                std::vector<unsigned int> phot_3);
+  void FillTree();
   void Write();
 
 private:
@@ -31,6 +37,11 @@ private:
   unsigned int fPhotonCount_1;
   unsigned int fPhotonCount_2;
   unsigned int fPhotonCount_3;
+  std::vector<unsigned int> fPhotonTime_0;
+  std::vector<unsigned int> fPhotonTime_1;
+  std::vector<unsigned int> fPhotonTime_2;
+  std::vector<unsigned int> fPhotonTime_3;
+
 };
 
 #endif

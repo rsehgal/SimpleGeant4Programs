@@ -19,7 +19,7 @@
 #include "MyDetectorConstruction.h"
 #include "MyDetectorMessenger.h"
 #include "MySD.h"
-
+#include "ScintillatorSD.h"
 MyDetectorConstruction::MyDetectorConstruction() {}
 
 MyDetectorConstruction::~MyDetectorConstruction() {}
@@ -75,9 +75,12 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   // G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, pmt_mat, "Logical_PMT");
   G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, fBlockMaterial, "Logical_PMT");
 
+//  ScintillatorSD *myScintSD = new ScintillatorSD("MyScintSensitiveDetector");//, "MyScintBlockHitsCollection");
+  ScintillatorSD *myScintSD = new ScintillatorSD;
   MySD *mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
   G4SDManager *sdman = G4SDManager::GetSDMpointer();
   sdman->AddNewDetector(mySD);
+  sdman->AddNewDetector(myScintSD);
   pmt_log->SetSensitiveDetector(mySD);
 
   // G4VPhysicalVolume *phyPMT0 =
@@ -129,9 +132,13 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
                                        1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
                                        1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00};
 
+  /*std::vector<G4double> scintilFast = {0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
+                                       7.00, 6.00, 4.00, 3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00, 4.00,
+                                       5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00};*/
   std::vector<G4double> scintilSlow = {0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
                                        7.00, 6.00, 4.00, 3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00, 4.00,
                                        5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00};
+
 
   G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
 
@@ -142,8 +149,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
 
   myMPT1->AddConstProperty("SCINTILLATIONYIELD", 10000. / MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  myMPT1->AddConstProperty("FASTTIMECONSTANT", 1. * ns);
-  myMPT1->AddConstProperty("SLOWTIMECONSTANT", 10. * ns);
+  myMPT1->AddConstProperty("FASTTIMECONSTANT", 0.9 * ns);
+  myMPT1->AddConstProperty("SLOWTIMECONSTANT", 2.1 * ns);
   myMPT1->AddConstProperty("YIELDRATIO", 0.8);
 
   fBlockMaterial->SetMaterialPropertiesTable(myMPT1);
