@@ -25,11 +25,13 @@ public:
   virtual G4bool ProcessHits(G4Step *step, G4TouchableHistory *history);
   virtual void EndOfEvent(G4HCofThisEvent *hitCollection);
   static int numOfParticlesReached;
+  static unsigned int quadCoincidenceCounter;
 
 private:
   MyHitsCollection *fHitsCollection;
   static int stepNum;
   unsigned int photonCounter[4];
+  bool hitInPMT[4];
   std::vector<unsigned int> photonTime[4];
   Tree *fWrite;
   static unsigned int fEventCounter;

@@ -18,7 +18,7 @@
 int MySD::stepNum = 0;
 int MySD::numOfParticlesReached = 0;
 unsigned int MySD::fEventCounter = 0;
-
+unsigned int MySD::quadCoincidenceCounter = 0;
 /*MySD::MySD() {
         // TODO Auto-generated constructor stub
 
@@ -33,6 +33,7 @@ MySD::MySD(const G4String &name, const G4String &hitsCollectionName)
     : G4VSensitiveDetector(name), fHitsCollection(NULL) {
   collectionName.insert(hitsCollectionName);
   fWrite = new Tree("ScintillatorData.root");
+  quadCoincidenceCounter = 0;
 }
 
 void MySD::Initialize(G4HCofThisEvent *hce) {
@@ -43,10 +44,14 @@ void MySD::Initialize(G4HCofThisEvent *hce) {
   photonCounter[1] = 0;
   photonCounter[2] = 0;
   photonCounter[3] = 0;
-  //photonTime[0].clear();// = 0;
-  //photonTime[1].clear();// = 0;
-  //photonTime[2].clear();// = 0;
-  //photonTime[3].clear();// = 0;
+  hitInPMT[0]=false;  //NORTH
+  hitInPMT[1]=false;  //SOUTH
+  hitInPMT[2]=false;  //EAST
+  hitInPMT[3]=false;  //WEST
+  photonTime[0].clear();// = 0;
+  photonTime[1].clear();// = 0;
+  photonTime[2].clear();// = 0;
+  photonTime[3].clear();// = 0;
   fEventCounter++;
 }
 
@@ -65,18 +70,22 @@ G4bool MySD::ProcessHits(G4Step *aStep, G4TouchableHistory *) {
       //std::cout << "time : " << (startPoint->GetGlobalTime() / ps) << std::endl;
       //std::cout <<"Energy of photon : " << track->GetVertexKineticEnergy() << std::endl;
       photonCounter[0]++;
+      hitInPMT[0]=true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_1") {
       photonTime[1].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[1]++;
+      hitInPMT[1]=true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_2") {
       photonTime[2].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[2]++;
+      hitInPMT[2]=true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_3") {
       photonTime[3].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[3]++;
+      hitInPMT[3]=true;
     }
 
   }
@@ -89,7 +98,7 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
     for (G4int i = 0; i < nofHits; i++)
       (*fHitsCollection)[i]->Print();
   }
-  if (0) {
+  if (1) {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "No Of photons reached PMT_0 : " << photonCounter[0] << std::endl;
     std::cout << "No Of photons reached PMT_1 : " << photonCounter[1] << std::endl;
@@ -101,6 +110,13 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
   fWrite->Fill(photonCounter[0], photonCounter[1], photonCounter[2], photonCounter[3]);
   fWrite->FillTime(photonTime[0], photonTime[1], photonTime[2], photonTime[3]);
   fWrite->FillTree();
+
+  bool quadCoincidence = hitInPMT[0] && photonCounter[0]>100 && 
+                         hitInPMT[1] && photonCounter[1]>100 &&
+                         hitInPMT[2] && photonCounter[2]>100 &&
+			 hitInPMT[3] && photonCounter[3]>100;
+  if(quadCoincidence)
+	quadCoincidenceCounter++;
   if (!(fEventCounter % 10000) && fEventCounter != 0)
     std::cout << "Processed : " << fEventCounter << " Events....." << std::endl;
 }
