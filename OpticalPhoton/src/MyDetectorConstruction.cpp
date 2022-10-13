@@ -82,6 +82,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   sdman->AddNewDetector(mySD);
   sdman->AddNewDetector(myScintSD);
   pmt_log->SetSensitiveDetector(mySD);
+  fLogicBlock->SetSensitiveDetector(mySD);
 
   // G4VPhysicalVolume *phyPMT0 =
   new G4PVPlacement(0, G4ThreeVector(0., 0., 16. * cm), pmt_log, "Physical_PMT_0", logicWorld, false, 0, checkOverlaps);

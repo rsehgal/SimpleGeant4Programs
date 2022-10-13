@@ -8,8 +8,9 @@
 #include <iostream>
 void ScintillatorSD::Initialize(G4HCofThisEvent *hce) {
 //  std::cout << "Inside Initialize of ScintillatorSD.........." << std::endl;
+fEnergyDepInAEvent=0;
 }
 
 G4bool ScintillatorSD::ProcessHits(G4Step *step, G4TouchableHistory *history){
-
+fEnergyDepInAEvent += step->GetTotalEnergyDeposit();
 }

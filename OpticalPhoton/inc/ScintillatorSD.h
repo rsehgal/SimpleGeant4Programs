@@ -10,6 +10,8 @@
 class G4HCofThisEvent;
 class ScintillatorSD : public G4VSensitiveDetector {
 public:
+double fEnergyDepInAEvent;
+public:
   ScintillatorSD(const G4String name, const G4String hitsCollectionName) : G4VSensitiveDetector(name) {}
   ScintillatorSD(const G4String name) : G4VSensitiveDetector(name) {}
   ScintillatorSD() : G4VSensitiveDetector("Hello") {}

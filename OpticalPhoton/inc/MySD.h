@@ -35,6 +35,7 @@ private:
   std::vector<unsigned int> photonTime[4];
   Tree *fWrite;
   static unsigned int fEventCounter;
+  double fEnergyDepositInAnEvent;
 };
 
 #endif /* INC_MYSD_H_ */

@@ -22,6 +22,7 @@ Tree::Tree(std::string filename) : fFileName(filename) {
   ftree->Branch("photonTime_1", &fPhotonTime_1);//, "fPhotonTime_1/i");
   ftree->Branch("photonTime_2", &fPhotonTime_2);//, "fPhotonTime_2/i");
   ftree->Branch("photonTime_3", &fPhotonTime_3);//, "fPhotonTime_3/i");
+  ftree->Branch("energyDep", &fEnergyDepositInAnEvent);//, "fPhotonTime_3/i");
 
   fHistPhotonCount_0 = new TH1F("Hist_PhotonCount_0", "Hist_PhotonCount_0", 10000, 0, 10000);
   fHistPhotonCount_1 = new TH1F("Hist_PhotonCount_1", "Hist_PhotonCount_1", 10000, 0, 10000);
@@ -51,6 +52,9 @@ void Tree::FillTime(std::vector<unsigned int> phot_0,
   fPhotonTime_1 = phot_1;
   fPhotonTime_2 = phot_2;
   fPhotonTime_3 = phot_3;
+}
+void Tree::FillEnergy(double energy){
+fEnergyDepositInAnEvent = energy;
 }
 void Tree::FillTree() { ftree->Fill(); }
 void Tree::Write() { fp->Write(); }

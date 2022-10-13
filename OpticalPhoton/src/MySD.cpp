@@ -44,14 +44,15 @@ void MySD::Initialize(G4HCofThisEvent *hce) {
   photonCounter[1] = 0;
   photonCounter[2] = 0;
   photonCounter[3] = 0;
-  hitInPMT[0]=false;  //NORTH
-  hitInPMT[1]=false;  //SOUTH
-  hitInPMT[2]=false;  //EAST
-  hitInPMT[3]=false;  //WEST
-  photonTime[0].clear();// = 0;
-  photonTime[1].clear();// = 0;
-  photonTime[2].clear();// = 0;
-  photonTime[3].clear();// = 0;
+  hitInPMT[0] = false;   // NORTH
+  hitInPMT[1] = false;   // SOUTH
+  hitInPMT[2] = false;   // EAST
+  hitInPMT[3] = false;   // WEST
+  photonTime[0].clear(); // = 0;
+  photonTime[1].clear(); // = 0;
+  photonTime[2].clear(); // = 0;
+  photonTime[3].clear(); // = 0;
+  fEnergyDepositInAnEvent = 0.;
   fEventCounter++;
 }
 
@@ -67,27 +68,35 @@ G4bool MySD::ProcessHits(G4Step *aStep, G4TouchableHistory *) {
     track->SetTrackStatus(fStopAndKill);
     if (touch1->GetVolume()->GetName() == "Physical_PMT_0") {
       photonTime[0].push_back(startPoint->GetGlobalTime() / ps);
-      //std::cout << "time : " << (startPoint->GetGlobalTime() / ps) << std::endl;
-      //std::cout <<"Energy of photon : " << track->GetVertexKineticEnergy() << std::endl;
+      // std::cout << "time : " << (startPoint->GetGlobalTime() / ps) << std::endl;
+      // std::cout <<"Energy of photon : " << track->GetVertexKineticEnergy() << std::endl;
       photonCounter[0]++;
-      hitInPMT[0]=true;
+      hitInPMT[0] = true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_1") {
       photonTime[1].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[1]++;
-      hitInPMT[1]=true;
+      hitInPMT[1] = true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_2") {
       photonTime[2].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[2]++;
-      hitInPMT[2]=true;
+      hitInPMT[2] = true;
     }
     if (touch1->GetVolume()->GetName() == "Physical_PMT_3") {
       photonTime[3].push_back(startPoint->GetGlobalTime() / ns);
       photonCounter[3]++;
-      hitInPMT[3]=true;
+      hitInPMT[3] = true;
     }
 
+  } else {
+    // Checking for muon through scintillator
+
+    if (particleName == "mu+" || particleName == "mu-") {
+      if (touch1->GetVolume()->GetName() == "PhysicalScintillatorBlock") {
+        fEnergyDepositInAnEvent += aStep->GetTotalEnergyDeposit();
+      }
+    }
   }
   return true;
 }
@@ -98,7 +107,7 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
     for (G4int i = 0; i < nofHits; i++)
       (*fHitsCollection)[i]->Print();
   }
-  if (1) {
+  if (0) {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "No Of photons reached PMT_0 : " << photonCounter[0] << std::endl;
     std::cout << "No Of photons reached PMT_1 : " << photonCounter[1] << std::endl;
@@ -109,14 +118,13 @@ void MySD::EndOfEvent(G4HCofThisEvent *) {
 
   fWrite->Fill(photonCounter[0], photonCounter[1], photonCounter[2], photonCounter[3]);
   fWrite->FillTime(photonTime[0], photonTime[1], photonTime[2], photonTime[3]);
+  fWrite->FillEnergy(fEnergyDepositInAnEvent);
   fWrite->FillTree();
 
-  bool quadCoincidence = hitInPMT[0] && photonCounter[0]>100 && 
-                         hitInPMT[1] && photonCounter[1]>100 &&
-                         hitInPMT[2] && photonCounter[2]>100 &&
-			 hitInPMT[3] && photonCounter[3]>100;
-  if(quadCoincidence)
-	quadCoincidenceCounter++;
+  bool quadCoincidence = hitInPMT[0] && photonCounter[0] > 100 && hitInPMT[1] && photonCounter[1] > 100 &&
+                         hitInPMT[2] && photonCounter[2] > 100 && hitInPMT[3] && photonCounter[3] > 100;
+  if (quadCoincidence)
+    quadCoincidenceCounter++;
   if (!(fEventCounter % 10000) && fEventCounter != 0)
     std::cout << "Processed : " << fEventCounter << " Events....." << std::endl;
 }

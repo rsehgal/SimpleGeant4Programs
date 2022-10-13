@@ -22,6 +22,7 @@ public:
                 std::vector<unsigned int> phot_1, 
                 std::vector<unsigned int> phot_2, 
                 std::vector<unsigned int> phot_3);
+  void FillEnergy(double energyDep);
   void FillTree();
   void Write();
 
@@ -41,7 +42,7 @@ private:
   std::vector<unsigned int> fPhotonTime_1;
   std::vector<unsigned int> fPhotonTime_2;
   std::vector<unsigned int> fPhotonTime_3;
-
+  double fEnergyDepositInAnEvent;
 };
 
 #endif
