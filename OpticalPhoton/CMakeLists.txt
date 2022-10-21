@@ -13,6 +13,15 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+option(ENABLE_OPTICAL_PHYSICS "Enable Optical Physics" OFF)
+option(PSBAR_GEOM "Use ISMRAN PSBAR Geometry" OFF)
+if(PSBAR_GEOM)
+add_definitions(-DPSBAR_GEOM)
+endif(PSBAR_GEOM)
+
+if(ENABLE_OPTICAL_PHYSICS)
+add_definitions(-DENABLE_OPTICAL_PHYSICS)
+endif(ENABLE_OPTICAL_PHYSICS)
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui

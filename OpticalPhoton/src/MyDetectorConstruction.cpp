@@ -30,7 +30,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   G4bool checkOverlaps = true;
 
   // World
-  G4double world_sizeXYZ = 60 * cm;
+  G4double world_sizeXYZ = 130 * cm;
   G4Material *world_mat = nist->FindOrBuildMaterial("G4_AIR");
 
   G4Box *solidWorld = new G4Box("World",                                                        // its name
@@ -61,9 +61,14 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   fPstyrene->AddElement(fH, 8);
 
   // Lets try to build material from NIST database
+#ifdef PSBAR_GEOM
+  G4Box *leadBlock = new G4Box("ScintillatorBlock", 50. * cm, 5. * cm, 5. * cm);
+#else
   G4Box *leadBlock = new G4Box("ScintillatorBlock", 15. * cm, 2. * cm, 15. * cm);
+#endif
   // fBlockMaterial = nist->FindOrBuildMaterial("G4_Pb");
   fBlockMaterial = fPstyrene;
+  fBlockMaterial = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   fLogicBlock = new G4LogicalVolume(leadBlock, fBlockMaterial, "LogicalScintillatorBlock");
   // G4VPhysicalVolume *phyLeadBlock =
   new G4PVPlacement(0,
@@ -75,23 +80,37 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   // G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, pmt_mat, "Logical_PMT");
   G4LogicalVolume *pmt_log = new G4LogicalVolume(pmt, fBlockMaterial, "Logical_PMT");
 
-//  ScintillatorSD *myScintSD = new ScintillatorSD("MyScintSensitiveDetector");//, "MyScintBlockHitsCollection");
   ScintillatorSD *myScintSD = new ScintillatorSD;
   MySD *mySD = new MySD("MySensitiveDetector", "MyBlockHitsCollection");
   G4SDManager *sdman = G4SDManager::GetSDMpointer();
-  sdman->AddNewDetector(mySD);
-  sdman->AddNewDetector(myScintSD);
-  pmt_log->SetSensitiveDetector(mySD);
-  fLogicBlock->SetSensitiveDetector(mySD);
 
+  sdman->AddNewDetector(mySD);
+  pmt_log->SetSensitiveDetector(mySD);
+
+  //MySD *mySD_Scint = new MySD("MySensitiveDetector_Scint", "MyBlockHitsCollection_Scint");
+  //sdman->AddNewDetector(mySD_Scint);
+  //fLogicBlock->SetSensitiveDetector(mySD);
+  sdman->AddNewDetector(myScintSD);
+  fLogicBlock->SetSensitiveDetector(myScintSD);
+  //fLogicBlock->SetSensitiveDetector(mySD_Scint);
+
+  G4RotationMatrix *rm = new G4RotationMatrix;
+  rm->rotateY(90 * deg);
+
+
+#ifdef PSBAR_GEOM
+  // G4VPhysicalVolume *phyPMT2 =
+  new G4PVPlacement(rm, G4ThreeVector(51. * cm, 0., 0.), pmt_log, "Physical_PMT_2", logicWorld, false, 2,
+                    checkOverlaps);
+  // G4VPhysicalVolume *phyPMT3 =
+  new G4PVPlacement(rm, G4ThreeVector(-51. * cm, 0., 0.), pmt_log, "Physical_PMT_3", logicWorld, false, 3,
+                    checkOverlaps);
+#else
   // G4VPhysicalVolume *phyPMT0 =
   new G4PVPlacement(0, G4ThreeVector(0., 0., 16. * cm), pmt_log, "Physical_PMT_0", logicWorld, false, 0, checkOverlaps);
   // G4VPhysicalVolume *phyPMT1 =
   new G4PVPlacement(0, G4ThreeVector(0., 0., -16. * cm), pmt_log, "Physical_PMT_1", logicWorld, false, 1,
                     checkOverlaps);
-
-  G4RotationMatrix *rm = new G4RotationMatrix;
-  rm->rotateY(90 * deg);
 
   // G4VPhysicalVolume *phyPMT2 =
   new G4PVPlacement(rm, G4ThreeVector(16. * cm, 0., 0.), pmt_log, "Physical_PMT_2", logicWorld, false, 2,
@@ -99,6 +118,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   // G4VPhysicalVolume *phyPMT3 =
   new G4PVPlacement(rm, G4ThreeVector(-16. * cm, 0., 0.), pmt_log, "Physical_PMT_3", logicWorld, false, 3,
                     checkOverlaps);
+#endif
   /*  G4VPhysicalVolume *phyPMT4 = new G4PVPlacement(rm, G4ThreeVector(-16.*cm, 0., 5.*cm), pmt_log, "Physical_PMT_4",
                                                    logicWorld, false, 4, checkOverlaps);
   G4RotationMatrix *rm2 = new G4RotationMatrix;
@@ -118,10 +138,17 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
 
   // Water
   //
-  std::vector<G4double> refractiveIndex1 = {1.3435, 1.344,  1.3445, 1.345,  1.3455, 1.346,  1.3465, 1.347,
+/*  std::vector<G4double> refractiveIndex1 = {1.3435, 1.344,  1.3445, 1.345,  1.3455, 1.346,  1.3465, 1.347,
                                             1.3475, 1.348,  1.3485, 1.3492, 1.35,   1.3505, 1.351,  1.3518,
                                             1.3522, 1.3530, 1.3535, 1.354,  1.3545, 1.355,  1.3555, 1.356,
-                                            1.3568, 1.3572, 1.358,  1.3585, 1.359,  1.3595, 1.36,   1.3608};
+                                            1.3568, 1.3572, 1.358,  1.3585, 1.359,  1.3595, 1.36,   1.3608};*/
+
+  std::vector<G4double> refractiveIndex1 = {
+						1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,  
+						1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,  
+						1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,  
+						1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58  
+  };
 
   std::vector<G4double> absorption = {
       3.448 * m,  4.082 * m,  6.329 * m,  9.174 * m,  12.346 * m, 13.889 * m, 15.152 * m, 17.241 * m,

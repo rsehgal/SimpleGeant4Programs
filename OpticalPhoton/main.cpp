@@ -63,8 +63,10 @@ int main(int argc, char **argv) {
 
   G4VModularPhysicsList *physicsList = new FTFP_BERT;
   // physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+#ifdef ENABLE_OPTICAL_PHYSICS
   G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
   physicsList->RegisterPhysics(opticalPhysics);
+#endif
 
   // physicsList->SetVerboseLevel(1);
   // runManager->SetUserInitialization(physicsList);
