@@ -13,6 +13,7 @@ public:
 unsigned int fPhotonCounter;
 public:
   TestBoxSD() : ParentSD() {}
+  TestBoxSD(const G4String name) : ParentSD(name) {}
   ~TestBoxSD() {}
   void Initialize(G4HCofThisEvent *hce) {
     fPhotonCounter=0;
@@ -27,11 +28,12 @@ public:
     //std::cout << "ParticleName from TestBoxSD ProcessHits : " << particleName << " : ProcessName : " << processName<<std::endl;
     if(particleName=="opticalphoton")
 	fPhotonCounter++;
+  	//track->SetTrackStatus(fStopAndKill);
   }
 
   virtual void EndOfEvent(G4HCofThisEvent *hce){
         //std::cout << MAGENTA << "TestBoxSD EndOfEvent called........." << RESET << std::endl;
-	//std::cout << "Total Number of Photon exiting the Scintilltor : " << fPhotonCounter << std::endl;
+	std::cout << "Total Number of Photon exiting the Scintilltor : " << fPhotonCounter << std::endl;
   }
 };
 

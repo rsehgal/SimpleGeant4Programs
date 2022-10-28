@@ -90,7 +90,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
   sdman->AddNewDetector(myScintSD);
   fLogicBlock->SetSensitiveDetector(myScintSD);
 
-  TestBoxSD *testBoxSD = new TestBoxSD;
+  TestBoxSD *testBoxSD = new TestBoxSD("SensitiveWorld");
   sdman->AddNewDetector(testBoxSD);
   logicWorld->SetSensitiveDetector(testBoxSD);
 

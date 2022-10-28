@@ -33,7 +33,7 @@ G4bool ScintillatorSD::ProcessHits(G4Step *aStep, G4TouchableHistory *history) {
   //std::cout << "RAMAN : material name : "<< track->GetMaterial()->GetName() << std::endl;
   // std::cout << "Vertex Energy : " << t rack->GetVertexKineticEnergy() << std::endl;
   G4String particleName = track->GetDefinition()->GetParticleName();
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
   if (particleName == "opticalphoton") {
     //std::cout << "RAMAN" << std::endl;
