@@ -4,7 +4,9 @@
 #/gun/energy 1 GeV
 /gun/particle gamma 
 /gun/energy 662 keV
-/gun/position 0 2 0 cm
+#/gun/particle ion
+#/gun/ion 55 137
+/gun/position 0 5.1 0 cm
 /gun/direction 0 -1 0
 #/B2/det/setTargetMaterial G4_PLASTIC_SC_VINYLTOLUENE
 /run/beamOn 10000

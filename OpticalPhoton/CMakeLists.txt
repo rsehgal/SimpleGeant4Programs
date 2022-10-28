@@ -15,6 +15,12 @@ endif()
 
 option(ENABLE_OPTICAL_PHYSICS "Enable Optical Physics" OFF)
 option(PSBAR_GEOM "Use ISMRAN PSBAR Geometry" OFF)
+option(VERBOSE "Enable some printing useful for debugging" OFF)
+
+if(VERBOSE)
+add_definitions(-DVERBOSE)
+endif(VERBOSE)
+
 if(PSBAR_GEOM)
 add_definitions(-DPSBAR_GEOM)
 endif(PSBAR_GEOM)
@@ -55,6 +61,6 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h ${PROJECT_SOURCE_DIR}/inc/*.hh .
 add_executable(main main.cpp ${sources} ${headers})
 target_link_libraries(main ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 #target_link_libraries(main ${Geant4_LIBRARIES} Tomo)
-add_executable(TestQNearQFar_ExpData ../CommonHelpers/test/TestQNearQFar_ExpData.cpp ${sources} ${headers})
+add_executable(TestQNearQFar_ExpData ${PROJECT_SOURCE_DIR}/CommonHelpers/test/TestQNearQFar_ExpData.cpp ${sources} ${headers})
 target_link_libraries(TestQNearQFar_ExpData ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 

@@ -37,7 +37,7 @@ private:
 class G4ParticleGun;
 class G4Event;
 class G4Box;
-
+class G4GeneralParticleSource;
 /// The primary generator action class with particle gun.
 ///
 /// The default kinematic is a 6 MeV gamma, randomly distribued 
@@ -54,8 +54,10 @@ class MyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   
     // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+    //const G4GeneralParticleSource* GetParticleGun() const { return fParticleGun; }
   
   private:
+    //G4GeneralParticleSource*  fParticleGun; // pointer a to G4 gun class
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
     //G4Box* fEnvelopeBox;
 };

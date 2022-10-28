@@ -14,6 +14,7 @@
 
 #include "FTFP_BERT.hh"
 #include "G4OpticalPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 //#include <TFile.h>
 //#include "physicslist.hh"
 #include "MySD.h"
@@ -61,7 +62,8 @@ int main(int argc, char **argv) {
   // Physics list
   // G4VModularPhysicsList* physicsList = new FTFP_BERT;//QBBC;
 
-  G4VModularPhysicsList *physicsList = new FTFP_BERT;
+  G4VModularPhysicsList *physicsList = new QBBC;//FTFP_BERT;
+  physicsList->RegisterPhysics(new G4RadioactiveDecayPhysics());
   // physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
 #ifdef ENABLE_OPTICAL_PHYSICS
   G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
